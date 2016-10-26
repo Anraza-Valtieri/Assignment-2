@@ -32,7 +32,7 @@ int main(char *argv[], int argc) {
 	printf("Welcome to the ICT1002 Logo interpreter.\n");
 	printf("Type commands one line at a time, after the ? prompt.\n");
 	printf("Execute EXIT to finish.\n\n");
-	
+	// Test
 	/* main interpreter loop */
 	while (!done) {
 	
