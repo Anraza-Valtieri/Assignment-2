@@ -15,29 +15,32 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\blogo.h">
+    <ClInclude Include="..\blogo.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\canvas.c">
+    <ClCompile Include="..\canvas.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\commands.c">
+    <ClCompile Include="..\commands.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\main.c">
+    <ClCompile Include="..\main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\program.c">
+    <ClCompile Include="..\program.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\turtle.c">
+    <ClCompile Include="..\turtle.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Makefile">
+    <None Include="..\Makefile">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\README.md">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>

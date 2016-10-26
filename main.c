@@ -7,6 +7,7 @@
 
  #include <ctype.h>
  #include <stdio.h>
+ #include <stdlib.h>     /* strtol */
  #include <string.h>
  #include "blogo.h"
  
@@ -14,7 +15,7 @@
  /*
   * Main method. Do not modify this function.
   */
-int main(char *argv[], int argc) {
+int main(int argc,char* argv[]) {
 
 	char line[MAX_INPUT];		/* buffer for holding a line of input from the user */
 	int line_no;				/* the line number input by the user */

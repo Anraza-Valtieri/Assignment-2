@@ -34,7 +34,7 @@ void canvas_init() {
 int canvas_putc(int x, int y, char c) {
 
 	/* to be implemented */
-
+    return 0;
 }
 
 
@@ -52,7 +52,7 @@ int canvas_putc(int x, int y, char c) {
 int canvas_puts(int x, int y, const char *s) {
 	
 	/* to be implemented */
-	
+    return 0;
 }
 
 

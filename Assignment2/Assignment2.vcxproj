@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{16E0B582-4170-41B2-AC19-4096765B60B2}</ProjectGuid>
+    <ProjectGuid>{B9B24F06-7B27-4302-AF08-308F148450DB}</ProjectGuid>
     <RootNamespace>Assignment2</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -110,17 +110,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\blogo.h" />
+    <ClInclude Include="..\blogo.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\canvas.c" />
-    <ClCompile Include="..\..\commands.c" />
-    <ClCompile Include="..\..\main.c" />
-    <ClCompile Include="..\..\program.c" />
-    <ClCompile Include="..\..\turtle.c" />
+    <ClCompile Include="..\canvas.c" />
+    <ClCompile Include="..\commands.c" />
+    <ClCompile Include="..\main.c" />
+    <ClCompile Include="..\program.c" />
+    <ClCompile Include="..\turtle.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Makefile" />
+    <None Include="..\Makefile" />
+    <None Include="..\README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
