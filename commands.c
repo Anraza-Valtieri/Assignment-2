@@ -74,6 +74,11 @@ int do_command(const char *command, const char *arg) {
 void do_backward(const char *arg) {
 	
 	/* to be implemented */
+    /* Errors, we always need number of steps. */
+    if (arg && !arg[0]){
+        printf("The backwards command requires a number of steps.\n");
+        return;
+    }
 		
 }
 
@@ -84,7 +89,12 @@ void do_backward(const char *arg) {
 void do_forward(const char *arg) {
 
 	/* to be implemented */
-		
+    /* Errors, we always need number of steps. */
+    if (arg && !arg[0]){
+        printf("The forward command requires a number of steps.\n");
+        return;
+    }
+    
 }
 
 
@@ -94,6 +104,11 @@ void do_forward(const char *arg) {
 void do_left(const char *arg) {
 
 	/* to be implemented */
+    /* Errors, we always need number of steps. */
+    if (arg && !arg[0]){
+        printf("The left command requires a number of steps.\n");
+        return;
+    }
 	
 }
 
@@ -104,7 +119,12 @@ void do_left(const char *arg) {
 void do_load(const char *arg) {
 	
 	/* to be implemented */
-
+    /* Errors, we always need an arg. */
+    if (arg && !arg[0]){
+        printf("The load command requires an arg.\n");
+        return;
+    }
+    
 }
 
 
@@ -134,6 +154,11 @@ void do_output(const char *arg) {
 void do_pen(const char *arg) {
 	
 	/* to be implemented */
+    /* Errors, we always need an arg. */
+    if (arg && !arg[0]){
+        printf("The pen command requires an argument (Up/Down).\n");
+        return;
+    }
 	
 }
 
@@ -154,6 +179,11 @@ void do_print(const char *arg) {
 void do_right(const char *arg) {
 	
 	/* to be implemented */
+    /* Errors, we always need number of steps. */
+    if (arg && !arg[0]){
+        printf("The right command requires a number of steps.\n");
+        return;
+    }
 	
 }
 
@@ -173,5 +203,10 @@ void do_run(const char *arg) {
 void do_save(const char *arg) {
 	
 	/* to be implemented */
+    /* Errors, we always need an arg. */
+    if (arg && !arg[0]){
+        printf("The save command requires an argument.\n");
+        return;
+    }
 	
 }

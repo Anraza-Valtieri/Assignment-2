@@ -11,6 +11,22 @@
 #include "blogo.h"
 
 /* declare all of the types and global variables associated with your program here */
+#define ID_LEN 20
+char **orderedIds;
+int arrayPointer = 0;
+
+
+void initArray(size_t initialSize) {
+    orderedIds = malloc(initialSize * sizeof(char*));
+}
+
+void insertArray(int point, char element) {
+    orderedIds[point] = malloc((ID_LEN+1) * sizeof(char));
+}
+
+void freeArray() {
+    free(orderedIds);
+}
 
 /*
  * De-allocate the memory used by the program.
@@ -102,3 +118,5 @@ void program_write(FILE *f) {
 	/* do be implemented */
 	
 }
+
+
