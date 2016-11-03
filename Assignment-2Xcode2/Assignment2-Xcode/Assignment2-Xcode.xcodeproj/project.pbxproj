@@ -12,6 +12,7 @@
 		D91988F21DCBA97100BBB769 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = D91988ED1DCBA97100BBB769 /* main.c */; };
 		D91988F31DCBA97100BBB769 /* program.c in Sources */ = {isa = PBXBuildFile; fileRef = D91988EE1DCBA97100BBB769 /* program.c */; };
 		D91988F41DCBA97100BBB769 /* turtle.c in Sources */ = {isa = PBXBuildFile; fileRef = D91988EF1DCBA97100BBB769 /* turtle.c */; };
+		D91988F61DCBB7DB00BBB769 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D91988F51DCBB7DB00BBB769 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +35,7 @@
 		D91988ED1DCBA97100BBB769 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = main.c; path = ../../../main.c; sourceTree = "<group>"; };
 		D91988EE1DCBA97100BBB769 /* program.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = program.c; path = ../../../program.c; sourceTree = "<group>"; };
 		D91988EF1DCBA97100BBB769 /* turtle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = turtle.c; path = ../../../turtle.c; sourceTree = "<group>"; };
+		D91988F51DCBB7DB00BBB769 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				D91988EA1DCBA97100BBB769 /* blogo.h */,
+				D91988F51DCBB7DB00BBB769 /* README.md */,
 				D91988EB1DCBA97100BBB769 /* canvas.c */,
 				D91988EC1DCBA97100BBB769 /* commands.c */,
 				D91988ED1DCBA97100BBB769 /* main.c */,
@@ -133,6 +136,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D91988F61DCBB7DB00BBB769 /* README.md in Sources */,
 				D91988F21DCBA97100BBB769 /* main.c in Sources */,
 				D91988F01DCBA97100BBB769 /* canvas.c in Sources */,
 				D91988F41DCBA97100BBB769 /* turtle.c in Sources */,
