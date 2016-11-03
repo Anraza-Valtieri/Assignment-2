@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D98149131DC0462400E62A0B"
-               BuildableName = "Assignment-2Xcode"
-               BlueprintName = "Assignment-2Xcode"
-               ReferencedContainer = "container:Assignment-2Xcode.xcodeproj">
+               BlueprintIdentifier = "D91988DF1DCBA95000BBB769"
+               BuildableName = "Assignment2-Xcode"
+               BlueprintName = "Assignment2-Xcode"
+               ReferencedContainer = "container:Assignment2-Xcode.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D98149131DC0462400E62A0B"
-            BuildableName = "Assignment-2Xcode"
-            BlueprintName = "Assignment-2Xcode"
-            ReferencedContainer = "container:Assignment-2Xcode.xcodeproj">
+            BlueprintIdentifier = "D91988DF1DCBA95000BBB769"
+            BuildableName = "Assignment2-Xcode"
+            BlueprintName = "Assignment2-Xcode"
+            ReferencedContainer = "container:Assignment2-Xcode.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -55,10 +55,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D98149131DC0462400E62A0B"
-            BuildableName = "Assignment-2Xcode"
-            BlueprintName = "Assignment-2Xcode"
-            ReferencedContainer = "container:Assignment-2Xcode.xcodeproj">
+            BlueprintIdentifier = "D91988DF1DCBA95000BBB769"
+            BuildableName = "Assignment2-Xcode"
+            BlueprintName = "Assignment2-Xcode"
+            ReferencedContainer = "container:Assignment2-Xcode.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -74,10 +74,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D98149131DC0462400E62A0B"
-            BuildableName = "Assignment-2Xcode"
-            BlueprintName = "Assignment-2Xcode"
-            ReferencedContainer = "container:Assignment-2Xcode.xcodeproj">
+            BlueprintIdentifier = "D91988DF1DCBA95000BBB769"
+            BuildableName = "Assignment2-Xcode"
+            BlueprintName = "Assignment2-Xcode"
+            ReferencedContainer = "container:Assignment2-Xcode.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
