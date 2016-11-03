@@ -79,6 +79,10 @@ void do_backward(const char *arg) {
         printf("The backwards command requires a number of steps.\n");
         return;
     }
+	if (insertArray(-1, &orderedIds, ((BACKWARDS*MOD) + atoi(arg))) == -1)
+		printf("Registered backward command.\n");
+    else
+        printf("Failed backward command.\n");
 		
 }
 
@@ -94,6 +98,10 @@ void do_forward(const char *arg) {
         printf("The forward command requires a number of steps.\n");
         return;
     }
+    if (insertArray(-1, &orderedIds,((FORWARD*MOD)+atoi(arg))) == -1)
+        printf("Registered forward command success.\n");
+    else
+        printf("Failed forward command.\n");
     
 }
 
@@ -109,7 +117,10 @@ void do_left(const char *arg) {
         printf("The left command requires a number of steps.\n");
         return;
     }
-	
+	if (insertArray(-1, &orderedIds, ((LEFT*MOD) + atoi(arg))) == -1)
+		printf("Registered left command success.\n");
+    else
+        printf("Failed left command.\n");
 }
 
 
@@ -133,7 +144,27 @@ void do_load(const char *arg) {
  */
 void do_list(const char *arg) {
 	
-	/* to be implemented */
+	/* to be implemented*/
+	int value = 0;
+	for (int i = 0; i < orderedIds.size; i++) {
+		value = orderedIds.array[i];
+		switch (value / MOD) {
+		case 1:
+			printf("%d - FORWARD,%d\n", value, value%MOD);
+			break;
+		case 2:
+			printf("%d - BACKWARD,%d\n", value, value%MOD);
+			break;
+		case 3:
+			printf("%d - LEFT,%d\n", value, value%MOD);
+			break;
+		case 4:
+			printf("%d - RIGHT,%d\n", value, value%MOD);
+			break;
+		}
+		//printf("%d - %d,%d\n", value, (value/MOD), value%MOD);
+	}
+    printf("orderedIDs.size %zu orderedIDs.used %zu \n", orderedIds.size,orderedIds.used);
 	
 }
 	
@@ -184,7 +215,10 @@ void do_right(const char *arg) {
         printf("The right command requires a number of steps.\n");
         return;
     }
-	
+	if (insertArray(-1, &orderedIds, ((RIGHT*MOD) + atoi(arg))) == -1)
+		printf("Registered right command success.\n");
+    else
+        printf("Failed right command.\n");
 }
 
 /*
@@ -193,6 +227,7 @@ void do_right(const char *arg) {
 void do_run(const char *arg) {
 	
 	/* to be implemented */
+    program_execute(arg);
 	
 }
 
@@ -208,5 +243,6 @@ void do_save(const char *arg) {
         printf("The save command requires an argument.\n");
         return;
     }
+    program_write(*arg);
 	
 }

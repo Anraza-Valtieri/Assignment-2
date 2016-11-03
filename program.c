@@ -11,21 +11,56 @@
 #include "blogo.h"
 
 /* declare all of the types and global variables associated with your program here */
-#define ID_LEN 20
-char **orderedIds;
-int arrayPointer = 0;
 
 
-void initArray(size_t initialSize) {
-    orderedIds = malloc(initialSize * sizeof(char*));
+/* Arrays Matters
+#define ID_LEN MAX_INPUT
+typedef struct {
+    int *array;
+    size_t used;
+    size_t size;
+} Array;
+Array orderedIds;*/
+
+void initArray(Array *a, size_t initialSize) {
+    // from our struct we create an array starting with 0 being used ;)
+    a->array = (int *)malloc(initialSize * sizeof(int));
+    a->used = 1;
+    a->size = initialSize;
 }
 
-void insertArray(int point, char element) {
-    orderedIds[point] = malloc((ID_LEN+1) * sizeof(char));
+int insertArray(int line_no, Array *a, int element) {
+    // If we require more space, create it!
+    if (a->used == a->size) {
+        a->size *= 2;
+        a->array = (int *)realloc(a->array, a->size * sizeof(int));
+    }
+    // Normally -1 line_no comes from commands without line numbers
+    if (line_no == -1){
+        a->array[a->used++] = element;
+		printf("insertArray: line_no: %d Element: %d.\n", line_no,element);
+        return line_no;
+    }
+    else{ // The commands have a line number attached to it.
+        a->array[line_no] = element;
+		printf("insertArray: line_no: %d Element: %d.\n", line_no, element);
+        return line_no;
+    }
 }
 
-void freeArray() {
-    free(orderedIds);
+void freeArray(Array *a) {
+    free(a->array);
+    a->array = NULL;
+    a->used = a->size = 0;
+    initArray(&orderedIds, 1);  // initially 1 elements
+    printf("freeArray called.\n");
+}
+
+void deleteArray(Array *a) {
+    free(a->array);
+    a->array = NULL;
+    a->used = a->size = 0;
+    printf("deleteArray called.\n");
 }
 
 /*
@@ -34,6 +69,7 @@ void freeArray() {
 void program_close() {
 	
 	/* to be implemented */
+    deleteArray(&orderedIds);
 	
 }
 
@@ -43,8 +79,8 @@ void program_close() {
  * lines in it.
  */
 void program_init() {
-	
-	/* to be implemented */
+	// init the array
+    initArray(&orderedIds, 1);  // initially 1 elements
 	
 }
 
@@ -58,8 +94,11 @@ void program_init() {
 int program_execute() {
 	
 	/* to be implemented */
-	
-	return 0;
+    int totalCommands, successfulCommands = 0;
+    /* to be implemented */
+    printf("program_execute completed with successfulCommands: %d and a total of %d commands.\n", successfulCommands, totalCommands);
+    return totalCommands;
+    
 	
 }
 
@@ -74,10 +113,12 @@ int program_execute() {
  *  the number of lines successfully read
  */
 int program_read(FILE *f) {
-	
+	printf("program_read Called.\n");
+    int totalCommands = 0;
 	/* to be implemented */
-	
-	return 0;
+    freeArray(&orderedIds);
+	printf("program_read completed with a total of %d commands.\n", totalCommands);
+	return totalCommands;
 	
 }
 
@@ -99,11 +140,37 @@ int program_read(FILE *f) {
  *   0, if memory could not be allocated
  */
 int program_update(int line_no, const char *command, const char *arg) {
-
 	/* to be implemented */ 
-
-	return line_no;
-	
+    //insertArray(line_no, command);
+    if (compare_token(command, "backward") == 0)
+        return insertArray(line_no, &orderedIds,((BACKWARDS*MOD)+ atoi(arg)));
+    else if (compare_token(command, "forward") == 0)
+        return insertArray(line_no, &orderedIds,((FORWARD*MOD)+ atoi(arg)));
+    else if (compare_token(command, "left") == 0)
+        return insertArray(line_no, &orderedIds,((LEFT*MOD)+ atoi(arg)));
+    else if (compare_token(command, "list") == 0)
+        do_list(arg);
+    else if (compare_token(command, "load") == 0)
+        printf("Unrecognised command with line number: %s.\n", command);
+    else if (compare_token(command, "output") == 0)
+        do_output(arg);
+    else if (compare_token(command, "pen") == 0)
+        return insertArray(line_no, &orderedIds,((PEN*MOD)+atoi(arg)));
+    else if (compare_token(command, "print") == 0)
+        printf("Unrecognised command with line number: %s.\n", command);
+    else if (compare_token(command, "right") == 0)
+        return insertArray(line_no, &orderedIds,((RIGHT*MOD)+atoi(arg)));
+    else if (compare_token(command, "run") == 0)
+        printf("Unrecognised command with line number: %s.\n", command);
+    else if (compare_token(command, "save") == 0)
+        printf("Unrecognised command with line number: %s.\n", command);
+    else if (compare_token(command, "exit") == 0)
+        printf("Unrecognised command with line number: %s.\n", command);
+    else
+        printf("Unrecognised command: %s.\n", command);
+    
+    return 0;
+    
 }
 
 
@@ -116,6 +183,7 @@ int program_update(int line_no, const char *command, const char *arg) {
 void program_write(FILE *f) {
 	
 	/* do be implemented */
+    printf("program_write Called\n");
 	
 }
 

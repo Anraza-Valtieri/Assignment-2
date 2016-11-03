@@ -28,8 +28,25 @@
 /* pen states */
 #define PEN_DOWN	0
 #define PEN_UP		1
- 
- 
+
+/* Commands */
+#define FORWARD 1
+#define BACKWARDS 2
+#define LEFT 3
+#define RIGHT 4
+#define PEN 5
+#define MOD 80 // 52
+
+/* Arrays Matters */
+#define ID_LEN MAX_INPUT
+typedef struct {
+    int *array;
+    size_t used;
+    size_t size;
+} Array;
+
+Array orderedIds;
+
 /* functions defined in main.c */
 int compare_token(const char *token1, const char *token2);
 int parse_line(const char *line, int *line_no, char *command, char *arg);
@@ -65,6 +82,10 @@ int program_read(FILE *f);
 int program_update(int line_no, const char *command, const char *arg);
 void program_write(FILE *f);
 
+void initArray(Array *a, size_t initialSize);
+int insertArray(int line_no, Array *a, int element);
+void freeArray(Array *a);
+void deleteArray(Array *a);
 
 /* functions defined in turtle.c */
 void turtle_init();
