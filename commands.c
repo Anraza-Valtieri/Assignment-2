@@ -79,10 +79,10 @@ void do_backward(const char *arg) {
         printf("The backwards command requires a number of steps.\n");
         return;
     }
-	if (insertArray(-1, &orderedIds, ((BACKWARDS*MOD) + atoi(arg))) == -1)
+	/*if (insertArray(-1, &orderedIds, ((BACKWARDS*MOD) + atoi(arg))) == -1)
 		printf("Registered backward command.\n");
     else
-        printf("Failed backward command.\n");
+        printf("Failed backward command.\n");*/
 		
 }
 
@@ -98,10 +98,10 @@ void do_forward(const char *arg) {
         printf("The forward command requires a number of steps.\n");
         return;
     }
-    if (insertArray(-1, &orderedIds,((FORWARD*MOD)+atoi(arg))) == -1)
+    /*if (insertArray(-1, &orderedIds,((FORWARD*MOD)+atoi(arg))) == -1)
         printf("Registered forward command success.\n");
     else
-        printf("Failed forward command.\n");
+        printf("Failed forward command.\n");*/
     
 }
 
@@ -117,10 +117,10 @@ void do_left(const char *arg) {
         printf("The left command requires a number of steps.\n");
         return;
     }
-	if (insertArray(-1, &orderedIds, ((LEFT*MOD) + atoi(arg))) == -1)
+	/*if (insertArray(-1, &orderedIds, ((LEFT*MOD) + atoi(arg))) == -1)
 		printf("Registered left command success.\n");
     else
-        printf("Failed left command.\n");
+        printf("Failed left command.\n");*/
 }
 
 
@@ -150,16 +150,16 @@ void do_list(const char *arg) {
 		value = orderedIds.array[i];
 		switch (value / MOD) {
 		case 1:
-			printf("%d - FORWARD,%d\n", value, value%MOD);
+			printf("%d - FORWARD,%d - %d\n", i*LINEMOD, value%MOD,value);
 			break;
 		case 2:
-			printf("%d - BACKWARD,%d\n", value, value%MOD);
+			printf("%d - BACKWARD,%d - %d\n", i*LINEMOD, value%MOD,value);
 			break;
 		case 3:
-			printf("%d - LEFT,%d\n", value, value%MOD);
+			printf("%d - LEFT,%d - %d\n", i*LINEMOD, value%MOD,value);
 			break;
 		case 4:
-			printf("%d - RIGHT,%d\n", value, value%MOD);
+			printf("%d - RIGHT,%d - %d\n", i*LINEMOD, value%MOD,value);
 			break;
 		}
 		//printf("%d - %d,%d\n", value, (value/MOD), value%MOD);
@@ -215,10 +215,10 @@ void do_right(const char *arg) {
         printf("The right command requires a number of steps.\n");
         return;
     }
-	if (insertArray(-1, &orderedIds, ((RIGHT*MOD) + atoi(arg))) == -1)
+	/*if (insertArray(-1, &orderedIds, ((RIGHT*MOD) + atoi(arg))) == -1)
 		printf("Registered right command success.\n");
     else
-        printf("Failed right command.\n");
+        printf("Failed right command.\n");*/
 }
 
 /*

@@ -55,12 +55,9 @@ int main(int argc,char* argv[]) {
 		}
 		
 	}
-	
-	printf("Goodbye!\n");
-	
 	/* de-allocate the program */
 	program_close();
-	
+	printf("Goodbye!\n");
 	return 0;
 	
 }

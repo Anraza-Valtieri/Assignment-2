@@ -36,6 +36,7 @@
 #define RIGHT 4
 #define PEN 5
 #define MOD 80 // 52
+#define LINEMOD 10 // 52
 
 /* Arrays Matters */
 #define ID_LEN MAX_INPUT

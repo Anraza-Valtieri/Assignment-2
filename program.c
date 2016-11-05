@@ -38,21 +38,48 @@ int insertArray(int line_no, Array *a, int element) {
     // Normally -1 line_no comes from commands without line numbers
     if (line_no == -1){
         a->array[a->used++] = element;
-		printf("insertArray: line_no: %d Element: %d.\n", line_no,element);
+		printf("insertArray -1: line_no: %d Element: %d.\n", line_no,element);
         return line_no;
-    }
-    else{ // The commands have a line number attached to it.
+    }else{ // The commands have a line number attached to it.
         a->array[line_no] = element;
-		printf("insertArray: line_no: %d Element: %d.\n", line_no, element);
+        a->used++;
+		printf("insertArray number attached: line_no: %d Element: %d.\n", line_no, element);
         return line_no;
     }
+}
+
+int addElement(int positionToInsertAt, Array *a, int element)
+{
+    if (a->used == a->size) {
+        a->size *= 2;
+        a->array = (int *)realloc(a->array, a->size * sizeof(int));
+    }
+    for (int i = a->used; i != 0; --i){
+        if (i < positionToInsertAt){
+            printf("addElement < i=%d positionToInsertAt=%d\n",i,positionToInsertAt);
+            a->array[i] = a->array[i];
+        }
+    
+        if (i == positionToInsertAt){
+            printf("addElement == i=%d positionToInsertAt=%d\n",i,positionToInsertAt);
+            a->array[i] = element;
+            a->used++;
+            return i;
+        }
+    
+        if (i > positionToInsertAt){
+            printf("addElement > i=%d positionToInsertAt=%d\n",i,positionToInsertAt);
+            a->array[i] = a->array[i-1];
+        }
+    }
+    return -1;
 }
 
 void freeArray(Array *a) {
     free(a->array);
     a->array = NULL;
     a->used = a->size = 0;
-    initArray(&orderedIds, 1);  // initially 1 elements
+    initArray(&orderedIds, 1);  // initial 1 elements
     printf("freeArray called.\n");
 }
 
@@ -140,34 +167,68 @@ int program_read(FILE *f) {
  *   0, if memory could not be allocated
  */
 int program_update(int line_no, const char *command, const char *arg) {
-	/* to be implemented */ 
-    //insertArray(line_no, command);
-    if (compare_token(command, "backward") == 0)
-        return insertArray(line_no, &orderedIds,((BACKWARDS*MOD)+ atoi(arg)));
-    else if (compare_token(command, "forward") == 0)
-        return insertArray(line_no, &orderedIds,((FORWARD*MOD)+ atoi(arg)));
-    else if (compare_token(command, "left") == 0)
-        return insertArray(line_no, &orderedIds,((LEFT*MOD)+ atoi(arg)));
-    else if (compare_token(command, "list") == 0)
-        do_list(arg);
-    else if (compare_token(command, "load") == 0)
-        printf("Unrecognised command with line number: %s.\n", command);
-    else if (compare_token(command, "output") == 0)
-        do_output(arg);
-    else if (compare_token(command, "pen") == 0)
-        return insertArray(line_no, &orderedIds,((PEN*MOD)+atoi(arg)));
-    else if (compare_token(command, "print") == 0)
-        printf("Unrecognised command with line number: %s.\n", command);
-    else if (compare_token(command, "right") == 0)
-        return insertArray(line_no, &orderedIds,((RIGHT*MOD)+atoi(arg)));
-    else if (compare_token(command, "run") == 0)
-        printf("Unrecognised command with line number: %s.\n", command);
-    else if (compare_token(command, "save") == 0)
-        printf("Unrecognised command with line number: %s.\n", command);
-    else if (compare_token(command, "exit") == 0)
-        printf("Unrecognised command with line number: %s.\n", command);
-    else
-        printf("Unrecognised command: %s.\n", command);
+	// If line number in 10s we are good
+    if(line_no % 10 == 0){
+        line_no = line_no/LINEMOD;
+        printf("program_update: Adding new entry at %d\n", line_no);
+        if (compare_token(command, "backward") == 0)
+            return insertArray(line_no, &orderedIds,((BACKWARDS*MOD)+ atoi(arg)));
+        else if (compare_token(command, "forward") == 0)
+            return insertArray(line_no, &orderedIds,((FORWARD*MOD)+ atoi(arg)));
+        else if (compare_token(command, "left") == 0)
+            return insertArray(line_no, &orderedIds,((LEFT*MOD)+ atoi(arg)));
+        else if (compare_token(command, "list") == 0)
+            do_list(arg);
+        else if (compare_token(command, "load") == 0)
+            printf("Unrecognised command with line number: %s.\n", command);
+        else if (compare_token(command, "output") == 0)
+            do_output(arg);
+        else if (compare_token(command, "pen") == 0)
+            return insertArray(line_no, &orderedIds,((PEN*MOD)+atoi(arg)));
+        else if (compare_token(command, "print") == 0)
+            printf("Unrecognised command with line number: %s.\n", command);
+        else if (compare_token(command, "right") == 0)
+            return insertArray(line_no, &orderedIds,((RIGHT*MOD)+atoi(arg)));
+        else if (compare_token(command, "run") == 0)
+            printf("Unrecognised command with line number: %s.\n", command);
+        else if (compare_token(command, "save") == 0)
+            printf("Unrecognised command with line number: %s.\n", command);
+        else if (compare_token(command, "exit") == 0)
+            printf("Unrecognised command with line number: %s.\n", command);
+        else
+            printf("Unrecognised command: %s.\n", command);
+    }else{ // We are no longer in 10s means we want to insert inbetween some index
+        line_no = (line_no/10)+1;
+        printf("program_update: Inserting entry at %d\n", line_no);
+        if (compare_token(command, "backward") == 0)
+            return addElement(line_no, &orderedIds,((BACKWARDS*MOD)+ atoi(arg)));
+        else if (compare_token(command, "forward") == 0)
+            return addElement(line_no, &orderedIds,((FORWARD*MOD)+ atoi(arg)));
+        else if (compare_token(command, "left") == 0)
+            return addElement(line_no, &orderedIds,((LEFT*MOD)+ atoi(arg)));
+        else if (compare_token(command, "list") == 0)
+            do_list(arg);
+        else if (compare_token(command, "load") == 0)
+            printf("Unrecognised command with line number: %s.\n", command);
+        else if (compare_token(command, "output") == 0)
+            do_output(arg);
+        else if (compare_token(command, "pen") == 0)
+            return addElement(line_no, &orderedIds,((PEN*MOD)+atoi(arg)));
+        else if (compare_token(command, "print") == 0)
+            printf("Unrecognised command with line number: %s.\n", command);
+        else if (compare_token(command, "right") == 0)
+            return addElement(line_no, &orderedIds,((RIGHT*MOD)+atoi(arg)));
+        else if (compare_token(command, "run") == 0)
+            printf("Unrecognised command with line number: %s.\n", command);
+        else if (compare_token(command, "save") == 0)
+            printf("Unrecognised command with line number: %s.\n", command);
+        else if (compare_token(command, "exit") == 0)
+            printf("Unrecognised command with line number: %s.\n", command);
+        else
+            printf("Unrecognised command: %s.\n", command);
+    }
+    
+    
     
     return 0;
     
