@@ -135,7 +135,7 @@ void do_load(const char *arg) {
         printf("The load command requires an arg.\n");
         return;
     }
-    freeArray(&orderedIds);
+    clearNodes();
     
 }
 
@@ -146,27 +146,7 @@ void do_load(const char *arg) {
 void do_list(const char *arg) {
 	
 	/* to be implemented*/
-	int value = 0;
-	for (int i = 0; i < orderedIds.size; i++) {
-		value = orderedIds.array[i];
-		switch (value / MOD) {
-		case 1:
-			printf("%d - FORWARD,%d - %d\n", i*LINEMOD, value%MOD,value);
-			break;
-		case 2:
-			printf("%d - BACKWARD,%d - %d\n", i*LINEMOD, value%MOD,value);
-			break;
-		case 3:
-			printf("%d - LEFT,%d - %d\n", i*LINEMOD, value%MOD,value);
-			break;
-		case 4:
-			printf("%d - RIGHT,%d - %d\n", i*LINEMOD, value%MOD,value);
-			break;
-		}
-		//printf("%d - %d,%d\n", value, (value/MOD), value%MOD);
-	}
-    printf("orderedIDs.size %zu orderedIDs.used %zu \n", orderedIds.size,orderedIds.used);
-	
+    program_print_All();
 }
 	
 
