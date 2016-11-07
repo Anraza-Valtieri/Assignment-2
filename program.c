@@ -29,11 +29,17 @@ void initArray(Array *a, size_t initialSize) {
     a->size = initialSize;
 }
 
+void growArray(Array *a){
+    printf("growArray used: %zu size: %zu.\n", a->used,a->size);
+    a->size *= 2;
+    a->array = (int *)realloc(a->array, a->size * sizeof(int));
+    printf("growArray allocated used: %zu size: %zu.\n", a->used,a->size);
+}
+
 int insertArray(int line_no, Array *a, int element) {
     // If we require more space, create it!
     if (a->used == a->size) {
-        a->size *= 2;
-        a->array = (int *)realloc(a->array, a->size * sizeof(int));
+        growArray(&orderedIds);
     }
     // Normally -1 line_no comes from commands without line numbers
     if (line_no == -1){
@@ -51,8 +57,7 @@ int insertArray(int line_no, Array *a, int element) {
 int addElement(int positionToInsertAt, Array *a, int element)
 {
     if (a->used == a->size) {
-        a->size *= 2;
-        a->array = (int *)realloc(a->array, a->size * sizeof(int));
+        growArray(&orderedIds);
     }
     for (int i = a->used; i != 0; --i){
         if (i < positionToInsertAt){

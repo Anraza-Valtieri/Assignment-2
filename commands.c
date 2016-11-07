@@ -135,6 +135,7 @@ void do_load(const char *arg) {
         printf("The load command requires an arg.\n");
         return;
     }
+    freeArray(&orderedIds);
     
 }
 
