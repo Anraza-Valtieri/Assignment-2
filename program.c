@@ -11,89 +11,179 @@
 #include "blogo.h"
 
 /* declare all of the types and global variables associated with your program here */
-
-
-/* Arrays Matters
+/* Arrays Matters */
 #define ID_LEN MAX_INPUT
 typedef struct {
-    int *array;
-    size_t used;
-    size_t size;
-} Array;
-Array orderedIds;*/
+    struct data *last;
+    struct data *first;
+    int last_line;
+} Program;
 
-void initArray(Array *a, size_t initialSize) {
+Program program;
+
+typedef struct data {
+    int line_no;
+    int element;
+    struct data *next;
+    struct data *prev;
+} Data;
+
+
+void initNodes() {
     // from our struct we create an array starting with 0 being used ;)
-    a->array = (int *)malloc(initialSize * sizeof(int));
-    a->used = 1;
-    a->size = initialSize;
+    program.first = NULL;
+    program.last_line = 0;
 }
 
-void growArray(Array *a){
-    printf("growArray used: %zu size: %zu.\n", a->used,a->size);
-    a->size *= 2;
-    a->array = (int *)realloc(a->array, a->size * sizeof(int));
-    printf("growArray allocated used: %zu size: %zu.\n", a->used,a->size);
-}
-
-int insertArray(int line_no, Array *a, int element) {
-    // If we require more space, create it!
-    if (a->used == a->size) {
-        growArray(&orderedIds);
+void clearNodes() {
+    if (program.first == NULL) {
+        printf("clearNodes: Nothing to list.\n");
     }
-    // Normally -1 line_no comes from commands without line numbers
-    if (line_no == -1){
-        a->array[a->used++] = element;
-		printf("insertArray -1: line_no: %d Element: %d.\n", line_no,element);
-        return line_no;
-    }else{ // The commands have a line number attached to it.
-        a->array[line_no] = element;
-        a->used++;
-		printf("insertArray number attached: line_no: %d Element: %d.\n", line_no, element);
-        return line_no;
-    }
-}
-
-int addElement(int positionToInsertAt, Array *a, int element)
-{
-    if (a->used == a->size) {
-        growArray(&orderedIds);
-    }
-    for (int i = a->used; i != 0; --i){
-        if (i < positionToInsertAt){
-            printf("addElement < i=%d positionToInsertAt=%d\n",i,positionToInsertAt);
-            a->array[i] = a->array[i];
+    else {
+        // Init lookup from last Line
+        while (1) {
+            Data *current_line;
+            current_line = program.last;
+            printf("clearNodes: Line No: %d data: %d\n", current_line->line_no, current_line->element);
+            /* We have reached the end of clearing Nodes. */
+            if (current_line->prev == NULL) {
+                program.first = NULL;
+                program.last = NULL;
+                program.last_line = 0;
+                break;
+            }
+            else {
+                /* Set pointer to previous Node and free current.*/
+                program.last = current_line->prev;
+                free(current_line);
+            }
+            
         }
+    }
+}
+
+
+int insertNode(int line_no, int element) {
+    if (element%MOD > MOD){
+        printf("InsertNode: Failed to insert data, element > MOD.\n");
+        return 0;
+    }
+    Data *new = malloc(sizeof(Data));
+    new->line_no = line_no;
+    new->element = element;
     
-        if (i == positionToInsertAt){
-            printf("addElement == i=%d positionToInsertAt=%d\n",i,positionToInsertAt);
-            a->array[i] = element;
-            a->used++;
-            return i;
+    /*The program does not have entry so initialize the first one.*/
+    if (program.first == NULL) {
+        new->next = NULL;
+        new->prev = NULL;
+        program.first = new;
+        program.last = new;
+        program.last_line = line_no;
+        
+    }else{
+        /*Line_no is larger than last registed last line.*/
+        if (line_no > program.last_line) {
+            new->prev = program.last;
+            new->next = NULL;
+            
+            program.last->next = new;
+            program.last = new;
+            program.last_line = line_no;
         }
-    
-        if (i > positionToInsertAt){
-            printf("addElement > i=%d positionToInsertAt=%d\n",i,positionToInsertAt);
-            a->array[i] = a->array[i-1];
+        else {
+            Data *current_line;
+            current_line = program.first;
+            while (1) {
+                /* Line_no already exist so we have to replace*/
+                if (current_line->line_no == line_no) {
+                    new->prev = current_line->prev;
+                    new->next = current_line->next;
+                    
+                    /* Current line is the very first node line!*/
+                    if (current_line->prev == NULL) {
+                        program.first = new;
+                    }
+                    else {
+                        current_line->prev->next = new;
+                    }
+                    /* Current line is last node!*/
+                    if (current_line->next == NULL) {
+                        program.last = new;
+                        program.last_line = line_no;
+                    }
+                    else {
+                        current_line->next->prev = new;
+                    }
+                    
+                    /*Lost child needs to be freed*/
+                    free(current_line);
+                    break;
+                }
+                
+                /* We are inserting inbetween lines here*/
+                if (current_line->line_no > line_no) {
+                    new->prev = current_line->prev;
+                    new->next = current_line;
+                    /* Tricky here, we somehow do not have a proper start in nodes so we have to create them
+                        ex. we started with line 20 and now want to add in line 10.
+                     */
+                    if(current_line->prev != NULL){
+                        current_line->prev->next = new;
+                        current_line->prev = new;
+                    }else{
+                        current_line->prev = new;
+                        program.first = new;
+                    }
+                    break;
+                }
+                
+                /* Deadend.*/
+                if (current_line->next == NULL) {
+                    break;
+                }
+                else {
+                    current_line = current_line->next;
+                }
+            }
         }
     }
-    return -1;
+    return line_no;
 }
 
-void freeArray(Array *a) {
-    free(a->array);
-    a->array = NULL;
-    a->used = a->size = 0;
-    initArray(&orderedIds, 1);  // initial 1 elements
-    printf("freeArray called.\n");
+void program_print_All() {
+    if (program.first == NULL) {
+        printf("program_print_All: Nothing to list.\n");
+    }else {
+        // Init lookup from first Line
+        Data *current_line;
+        current_line = program.first;
+        int value;
+        while (1) {
+            value = current_line->element;
+            switch (value / MOD) {
+                case 1:
+                    printf("%d FORWARD %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    break;
+                case 2:
+                    printf("%d BACKWARD %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    break;
+                case 3:
+                    printf("%d LEFT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    break;
+                case 4:
+                    printf("%d RIGHT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    break;
+            }
+            if (current_line->next == NULL) {
+                break;
+            }
+            else {
+                current_line = current_line->next;
+            }
+        }
+    }
 }
 
-void deleteArray(Array *a) {
-    free(a->array);
-    a->array = NULL;
-    a->used = a->size = 0;
-    printf("deleteArray called.\n");
-}
 
 /*
  * De-allocate the memory used by the program.
@@ -101,7 +191,6 @@ void deleteArray(Array *a) {
 void program_close() {
 	
 	/* to be implemented */
-    deleteArray(&orderedIds);
 	
 }
 
@@ -112,7 +201,7 @@ void program_close() {
  */
 void program_init() {
 	// init the array
-    initArray(&orderedIds, 1);  // initially 1 elements
+    initNodes();  // initially 1 elements
 	
 }
 
@@ -148,7 +237,6 @@ int program_read(FILE *f) {
 	printf("program_read Called.\n");
     int totalCommands = 0;
 	/* to be implemented */
-    freeArray(&orderedIds);
 	printf("program_read completed with a total of %d commands.\n", totalCommands);
 	return totalCommands;
 	
@@ -172,68 +260,33 @@ int program_read(FILE *f) {
  *   0, if memory could not be allocated
  */
 int program_update(int line_no, const char *command, const char *arg) {
-	// If line number in 10s we are good
-    if(line_no % 10 == 0){
-        line_no = line_no/LINEMOD;
-        printf("program_update: Adding new entry at %d\n", line_no);
-        if (compare_token(command, "backward") == 0)
-            return insertArray(line_no, &orderedIds,((BACKWARDS*MOD)+ atoi(arg)));
-        else if (compare_token(command, "forward") == 0)
-            return insertArray(line_no, &orderedIds,((FORWARD*MOD)+ atoi(arg)));
-        else if (compare_token(command, "left") == 0)
-            return insertArray(line_no, &orderedIds,((LEFT*MOD)+ atoi(arg)));
-        else if (compare_token(command, "list") == 0)
-            do_list(arg);
-        else if (compare_token(command, "load") == 0)
-            printf("Unrecognised command with line number: %s.\n", command);
-        else if (compare_token(command, "output") == 0)
-            do_output(arg);
-        else if (compare_token(command, "pen") == 0)
-            return insertArray(line_no, &orderedIds,((PEN*MOD)+atoi(arg)));
-        else if (compare_token(command, "print") == 0)
-            printf("Unrecognised command with line number: %s.\n", command);
-        else if (compare_token(command, "right") == 0)
-            return insertArray(line_no, &orderedIds,((RIGHT*MOD)+atoi(arg)));
-        else if (compare_token(command, "run") == 0)
-            printf("Unrecognised command with line number: %s.\n", command);
-        else if (compare_token(command, "save") == 0)
-            printf("Unrecognised command with line number: %s.\n", command);
-        else if (compare_token(command, "exit") == 0)
-            printf("Unrecognised command with line number: %s.\n", command);
-        else
-            printf("Unrecognised command: %s.\n", command);
-    }else{ // We are no longer in 10s means we want to insert inbetween some index
-        line_no = (line_no/10)+1;
-        printf("program_update: Inserting entry at %d\n", line_no);
-        if (compare_token(command, "backward") == 0)
-            return addElement(line_no, &orderedIds,((BACKWARDS*MOD)+ atoi(arg)));
-        else if (compare_token(command, "forward") == 0)
-            return addElement(line_no, &orderedIds,((FORWARD*MOD)+ atoi(arg)));
-        else if (compare_token(command, "left") == 0)
-            return addElement(line_no, &orderedIds,((LEFT*MOD)+ atoi(arg)));
-        else if (compare_token(command, "list") == 0)
-            do_list(arg);
-        else if (compare_token(command, "load") == 0)
-            printf("Unrecognised command with line number: %s.\n", command);
-        else if (compare_token(command, "output") == 0)
-            do_output(arg);
-        else if (compare_token(command, "pen") == 0)
-            return addElement(line_no, &orderedIds,((PEN*MOD)+atoi(arg)));
-        else if (compare_token(command, "print") == 0)
-            printf("Unrecognised command with line number: %s.\n", command);
-        else if (compare_token(command, "right") == 0)
-            return addElement(line_no, &orderedIds,((RIGHT*MOD)+atoi(arg)));
-        else if (compare_token(command, "run") == 0)
-            printf("Unrecognised command with line number: %s.\n", command);
-        else if (compare_token(command, "save") == 0)
-            printf("Unrecognised command with line number: %s.\n", command);
-        else if (compare_token(command, "exit") == 0)
-            printf("Unrecognised command with line number: %s.\n", command);
-        else
-            printf("Unrecognised command: %s.\n", command);
-    }
-    
-    
+    printf("program_update: Adding new entry at %d\n", line_no);
+    if (compare_token(command, "backward") == 0)
+        return insertNode(line_no,((BACKWARDS*MOD)+ atoi(arg)));
+    else if (compare_token(command, "forward") == 0)
+        return insertNode(line_no, ((FORWARD*MOD)+ atoi(arg)));
+    else if (compare_token(command, "left") == 0)
+        return insertNode(line_no,((LEFT*MOD)+ atoi(arg)));
+    else if (compare_token(command, "list") == 0)
+        do_list(arg);
+    else if (compare_token(command, "load") == 0)
+        printf("Unrecognised command with line number: %s.\n", command);
+    else if (compare_token(command, "output") == 0)
+        do_output(arg);
+    else if (compare_token(command, "pen") == 0)
+        return insertNode(line_no,((PEN*MOD)+atoi(arg)));
+    else if (compare_token(command, "print") == 0)
+        printf("Unrecognised command with line number: %s.\n", command);
+    else if (compare_token(command, "right") == 0)
+        return insertNode(line_no,((RIGHT*MOD)+atoi(arg)));
+    else if (compare_token(command, "run") == 0)
+        printf("Unrecognised command with line number: %s.\n", command);
+    else if (compare_token(command, "save") == 0)
+        printf("Unrecognised command with line number: %s.\n", command);
+    else if (compare_token(command, "exit") == 0)
+        printf("Unrecognised command with line number: %s.\n", command);
+    else
+        printf("Unrecognised command: %s.\n", command);
     
     return 0;
     
