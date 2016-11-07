@@ -36,6 +36,7 @@
 		D91988EE1DCBA97100BBB769 /* program.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = program.c; path = ../../../program.c; sourceTree = "<group>"; };
 		D91988EF1DCBA97100BBB769 /* turtle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = turtle.c; path = ../../../turtle.c; sourceTree = "<group>"; };
 		D91988F51DCBB7DB00BBB769 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../../README.md; sourceTree = "<group>"; };
+		D9E8FAA01DD0FD7500609C26 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .gitignore; path = ../../../.gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +75,7 @@
 				D91988EC1DCBA97100BBB769 /* commands.c */,
 				D91988ED1DCBA97100BBB769 /* main.c */,
 				D91988EE1DCBA97100BBB769 /* program.c */,
+				D9E8FAA01DD0FD7500609C26 /* .gitignore */,
 				D91988EF1DCBA97100BBB769 /* turtle.c */,
 			);
 			path = "Assignment2-Xcode";
@@ -279,6 +281,7 @@
 				D91988E91DCBA95000BBB769 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
