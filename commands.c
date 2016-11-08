@@ -14,7 +14,7 @@
 #include <string.h>
 #include "blogo.h"
 
-
+//
 /*
  * Execute a command.
  *

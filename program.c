@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "blogo.h"
-
+//
 /* declare all of the types and global variables associated with your program here */
 /* Arrays Matters */
 #define ID_LEN MAX_INPUT
@@ -70,7 +70,6 @@ int insertNode(int line_no, int element) {
         printf("[ERROR]:insertNode: Failed to insert data, element > MOD.\n");
         return 0;
     }
-    
     
     
     /*The program does not have entry so initialize the first one.*/
