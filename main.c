@@ -29,7 +29,7 @@ int main(int argc,char* argv[]) {
 	canvas_init();
 	turtle_init();
 	program_init();
-	
+
 	/* print a welcome message */
 	printf("Welcome to the ICT1002 Logo interpreter.\n");
 	printf("Type commands one line at a time, after the ? prompt.\n");
