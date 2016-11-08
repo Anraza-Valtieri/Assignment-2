@@ -54,8 +54,10 @@ void clearNodes() {
             }
             else {
                 /* Set pointer to previous Node and free current.*/
-                program.last = current_line->prev;
-                free(current_line);
+                if(current_line->prev != NULL){
+                    program.last = current_line->prev;
+                    free(current_line);
+                }
             }
             
         }
@@ -68,28 +70,36 @@ int insertNode(int line_no, int element) {
         printf("[ERROR]:insertNode: Failed to insert data, element > MOD.\n");
         return 0;
     }
-    Data *new = malloc(sizeof(Data));
-    new->line_no = line_no;
-    new->element = element;
     
-    printf("[DEBUG]:InsertNode: Insert Line_no %d Data %d.\n", new->line_no, new->element);
+    
+    
     /*The program does not have entry so initialize the first one.*/
     if (program.first == NULL) {
+        Data *new = malloc(sizeof(Data));
+        new->line_no = line_no;
+        new->element = element;
+
         new->next = NULL;
         new->prev = NULL;
         program.first = new;
         program.last = new;
         program.last_line = line_no;
+        printf("[DEBUG]:InsertNode: Insert Line_no %d Data %d.\n", line_no, element);
         
     }else{
         /*Line_no is larger than last registed last line.*/
         if (line_no > program.last_line) {
+            Data *new = malloc(sizeof(Data));
+            new->line_no = line_no;
+            new->element = element;
+
             new->prev = program.last;
             new->next = NULL;
             
             program.last->next = new;
             program.last = new;
             program.last_line = line_no;
+            printf("[DEBUG]:InsertNode: Insert Line_no %d Data %d.\n", line_no, element);
         }
         else {
             Data *current_line;
@@ -97,32 +107,17 @@ int insertNode(int line_no, int element) {
             while (1) {
                 /* Line_no already exist so we have to replace*/
                 if (current_line->line_no == line_no) {
-                    new->prev = current_line->prev;
-                    new->next = current_line->next;
-                    
-                    /* Current line is the very first node line!*/
-                    if (current_line->prev == NULL) {
-                        program.first = new;
-                    }
-                    else {
-                        current_line->prev->next = new;
-                    }
-                    /* Current line is last node!*/
-                    if (current_line->next == NULL) {
-                        program.last = new;
-                        program.last_line = line_no;
-                    }
-                    else {
-                        current_line->next->prev = new;
-                    }
-                    
-                    /*Lost child needs to be freed*/
-                    free(current_line);
+                    current_line->element = element;
+                    printf("[DEBUG]:InsertNode: Replace Line_no %d Data %d.\n", line_no, element);
                     break;
                 }
                 
                 /* We are inserting inbetween lines here*/
                 if (current_line->line_no > line_no) {
+                    Data *new = malloc(sizeof(Data));
+                    new->line_no = line_no;
+                    new->element = element;
+
                     new->prev = current_line->prev;
                     new->next = current_line;
                     /* Tricky here, we somehow do not have a proper start in nodes so we have to create them
@@ -135,6 +130,7 @@ int insertNode(int line_no, int element) {
                         current_line->prev = new;
                         program.first = new;
                     }
+                    printf("[DEBUG]:InsertNode: Insert Between Line_no %d Data %d.\n", line_no, element);
                     break;
                 }
                 
@@ -192,6 +188,7 @@ void program_print_All() {
 void program_close() {
 	
 	/* to be implemented */
+    clearNodes();
 	
 }
 
