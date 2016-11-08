@@ -72,18 +72,9 @@ int do_command(const char *command, const char *arg) {
  * BACKWARD command.
  */
 void do_backward(const char *arg) {
-	
-	/* to be implemented */
-    /* Errors, we always need number of steps. */
-    if (arg && !arg[0]){
-        printf("The backwards command requires a number of steps.\n");
-        return;
-    }
-	/*if (insertArray(-1, &orderedIds, ((BACKWARDS*MOD) + atoi(arg))) == -1)
-		printf("Registered backward command.\n");
-    else
-        printf("Failed backward command.\n");*/
-		
+	int steps = atoi(arg);
+	turtle_move(-steps);
+	canvas_write(NULL);
 }
 
 
@@ -92,17 +83,9 @@ void do_backward(const char *arg) {
  */
 void do_forward(const char *arg) {
 
-	/* to be implemented */
-    /* Errors, we always need number of steps. */
-    if (arg && !arg[0]){
-        printf("The forward command requires a number of steps.\n");
-        return;
-    }
-    /*if (insertArray(-1, &orderedIds,((FORWARD*MOD)+atoi(arg))) == -1)
-        printf("Registered forward command success.\n");
-    else
-        printf("Failed forward command.\n");*/
-    
+	int steps = atoi(arg);
+	turtle_move(steps);
+	canvas_write(NULL);
 }
 
 
@@ -110,17 +93,14 @@ void do_forward(const char *arg) {
  * LEFT command.
  */
 void do_left(const char *arg) {
-
-	/* to be implemented */
-    /* Errors, we always need number of steps. */
-    if (arg && !arg[0]){
-        printf("The left command requires a number of steps.\n");
-        return;
-    }
-	/*if (insertArray(-1, &orderedIds, ((LEFT*MOD) + atoi(arg))) == -1)
-		printf("Registered left command success.\n");
-    else
-        printf("Failed left command.\n");*/
+	int degree;
+	degree = atoi(arg);
+	if (degree != 45 && degree != 90 && degree != 135 && degree != 180) {
+		printf("Please enter a degree of 45, 90, 135 or 180.\n");
+	}
+	else {
+		turtle_turn(-degree);
+	}
 }
 
 
@@ -173,9 +153,9 @@ void do_list(const char *arg) {
  * OUTPUT command.
  */
 void do_output(const char *arg) {
-
+	printf("output command\n");
+	canvas_write(NULL);
 	/* to be implemented */
-	
 }
 
 
@@ -183,14 +163,17 @@ void do_output(const char *arg) {
  * PEN command.
  */
 void do_pen(const char *arg) {
-	
-	/* to be implemented */
-    /* Errors, we always need an arg. */
-    if (arg && !arg[0]){
-        printf("The pen command requires an argument (Up/Down).\n");
-        return;
-    }
-	
+	if (strcmp(arg, "UP") == 0) {
+		turtle_setpen(PEN_UP);
+	}
+
+	else if (strcmp(arg, "DOWN") == 0) {
+		turtle_setpen(PEN_DOWN);
+	}
+
+	else {
+		printf("The PEN command should be followed by UP or DOWN.\n");
+	}
 }
 
 
@@ -208,17 +191,14 @@ void do_print(const char *arg) {
  * RIGHT command.
  */
 void do_right(const char *arg) {
-	
-	/* to be implemented */
-    /* Errors, we always need number of steps. */
-    if (arg && !arg[0]){
-        printf("The right command requires a number of steps.\n");
-        return;
-    }
-	/*if (insertArray(-1, &orderedIds, ((RIGHT*MOD) + atoi(arg))) == -1)
-		printf("Registered right command success.\n");
-    else
-        printf("Failed right command.\n");*/
+	int degree;
+	degree = atoi(arg);
+	if (degree != 45 && degree != 90 && degree != 135 && degree != 180) {
+		printf("Please enter a degree of 45, 90, 135 or 180.\n");
+	}
+	else {
+		turtle_turn(degree);
+	}
 }
 
 /*

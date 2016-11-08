@@ -121,7 +121,8 @@ void program_init() {
 int program_execute() {
 	
 	/* to be implemented */
-    int totalCommands, successfulCommands = 0;
+	int totalCommands = 0;
+	int successfulCommands = 0;
     /* to be implemented */
     printf("program_execute completed with successfulCommands: %d and a total of %d commands.\n", successfulCommands, totalCommands);
     return totalCommands;
