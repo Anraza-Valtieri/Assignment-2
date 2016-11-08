@@ -9,6 +9,7 @@
  #include <stdio.h>
  #include <stdlib.h>     /* strtol */
  #include <string.h>
+ #include <time.h>
  #include "blogo.h"
  
  
@@ -28,13 +29,19 @@ int main(int argc,char* argv[]) {
 	canvas_init();
 	turtle_init();
 	program_init();
-	
+
 	/* print a welcome message */
 	printf("Welcome to the ICT1002 Logo interpreter.\n");
 	printf("Type commands one line at a time, after the ? prompt.\n");
 	printf("Execute EXIT to finish.\n\n");
+    /*clock_t tic = clock();
     program_execute();
-    clearNodes();
+    clock_t toc = clock();
+    printf("Elapsed: %f seconds\n", (double)(toc - tic) / CLOCKS_PER_SEC);
+    clock_t tic2 = clock();
+    program_execute();
+    clock_t toc2 = clock();
+    printf("Elapsed: %f seconds\n", (double)(toc2 - tic2) / CLOCKS_PER_SEC);*/
 	/* main interpreter loop */
 	while (!done) {
 		/* read a line of input */
