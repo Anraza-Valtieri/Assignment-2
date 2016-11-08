@@ -33,10 +33,10 @@ int main(int argc,char* argv[]) {
 	printf("Welcome to the ICT1002 Logo interpreter.\n");
 	printf("Type commands one line at a time, after the ? prompt.\n");
 	printf("Execute EXIT to finish.\n\n");
-	
+    program_execute();
+    clearNodes();
 	/* main interpreter loop */
 	while (!done) {
-	
 		/* read a line of input */
 		printf("? ");
 		fgets(line, MAX_INPUT - 1, stdin);

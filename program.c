@@ -44,7 +44,7 @@ void clearNodes() {
         while (1) {
             Data *current_line;
             current_line = program.last;
-            printf("clearNodes: Line No: %d data: %d\n", current_line->line_no, current_line->element);
+            printf("[DEBUG]:clearNodes: Line No: %d data: %d\n", current_line->line_no, current_line->element);
             /* We have reached the end of clearing Nodes. */
             if (current_line->prev == NULL) {
                 program.first = NULL;
@@ -54,8 +54,10 @@ void clearNodes() {
             }
             else {
                 /* Set pointer to previous Node and free current.*/
-                program.last = current_line->prev;
-                free(current_line);
+                if(current_line->prev != NULL){
+                    program.last = current_line->prev;
+                    free(current_line);
+                }
             }
             
         }
@@ -65,30 +67,39 @@ void clearNodes() {
 
 int insertNode(int line_no, int element) {
     if (element%MOD > MOD){
-        printf("InsertNode: Failed to insert data, element > MOD.\n");
+        printf("[ERROR]:insertNode: Failed to insert data, element > MOD.\n");
         return 0;
     }
-    Data *new = malloc(sizeof(Data));
-    new->line_no = line_no;
-    new->element = element;
+    
+    
     
     /*The program does not have entry so initialize the first one.*/
     if (program.first == NULL) {
+        Data *new = malloc(sizeof(Data));
+        new->line_no = line_no;
+        new->element = element;
+
         new->next = NULL;
         new->prev = NULL;
         program.first = new;
         program.last = new;
         program.last_line = line_no;
+        printf("[DEBUG]:InsertNode: Insert Line_no %d Data %d.\n", line_no, element);
         
     }else{
         /*Line_no is larger than last registed last line.*/
         if (line_no > program.last_line) {
+            Data *new = malloc(sizeof(Data));
+            new->line_no = line_no;
+            new->element = element;
+
             new->prev = program.last;
             new->next = NULL;
             
             program.last->next = new;
             program.last = new;
             program.last_line = line_no;
+            printf("[DEBUG]:InsertNode: Insert Line_no %d Data %d.\n", line_no, element);
         }
         else {
             Data *current_line;
@@ -96,32 +107,17 @@ int insertNode(int line_no, int element) {
             while (1) {
                 /* Line_no already exist so we have to replace*/
                 if (current_line->line_no == line_no) {
-                    new->prev = current_line->prev;
-                    new->next = current_line->next;
-                    
-                    /* Current line is the very first node line!*/
-                    if (current_line->prev == NULL) {
-                        program.first = new;
-                    }
-                    else {
-                        current_line->prev->next = new;
-                    }
-                    /* Current line is last node!*/
-                    if (current_line->next == NULL) {
-                        program.last = new;
-                        program.last_line = line_no;
-                    }
-                    else {
-                        current_line->next->prev = new;
-                    }
-                    
-                    /*Lost child needs to be freed*/
-                    free(current_line);
+                    current_line->element = element;
+                    printf("[DEBUG]:InsertNode: Replace Line_no %d Data %d.\n", line_no, element);
                     break;
                 }
                 
                 /* We are inserting inbetween lines here*/
                 if (current_line->line_no > line_no) {
+                    Data *new = malloc(sizeof(Data));
+                    new->line_no = line_no;
+                    new->element = element;
+
                     new->prev = current_line->prev;
                     new->next = current_line;
                     /* Tricky here, we somehow do not have a proper start in nodes so we have to create them
@@ -134,6 +130,7 @@ int insertNode(int line_no, int element) {
                         current_line->prev = new;
                         program.first = new;
                     }
+                    printf("[DEBUG]:InsertNode: Insert Between Line_no %d Data %d.\n", line_no, element);
                     break;
                 }
                 
@@ -191,6 +188,7 @@ void program_print_All() {
 void program_close() {
 	
 	/* to be implemented */
+    clearNodes();
 	
 }
 
@@ -215,9 +213,12 @@ void program_init() {
 int program_execute() {
 	
 	/* to be implemented */
-    int totalCommands, successfulCommands = 0;
+    int totalCommands = 0, successfulCommands = 0;
     /* to be implemented */
-    printf("program_execute completed with successfulCommands: %d and a total of %d commands.\n", successfulCommands, totalCommands);
+    for(int i=10; i<2000000; i += 10){
+        insertNode(i,(((rand()%4+1)*MOD)+ rand()%60));
+    }
+    //printf("program_execute completed with successfulCommands: %d and a total of %d commands.\n", successfulCommands, totalCommands);
     return totalCommands;
     
 	
@@ -260,7 +261,12 @@ int program_read(FILE *f) {
  *   0, if memory could not be allocated
  */
 int program_update(int line_no, const char *command, const char *arg) {
-    printf("program_update: Adding new entry at %d\n", line_no);
+    printf("[DEBUG]:program_update: Adding new entry at %d\n", line_no);
+    if(atoi(arg) < 0){
+        printf("[ERROR]:program_update: Failed adding new entry at %d. Arg < 0\n", line_no);
+        return 0;
+    }
+        
     if (compare_token(command, "backward") == 0)
         return insertNode(line_no,((BACKWARDS*MOD)+ atoi(arg)));
     else if (compare_token(command, "forward") == 0)
@@ -270,23 +276,23 @@ int program_update(int line_no, const char *command, const char *arg) {
     else if (compare_token(command, "list") == 0)
         do_list(arg);
     else if (compare_token(command, "load") == 0)
-        printf("Unrecognised command with line number: %s.\n", command);
+        printf("[ERROR]:program_update:Unrecognised command with line number: %s.\n", command);
     else if (compare_token(command, "output") == 0)
         do_output(arg);
     else if (compare_token(command, "pen") == 0)
         return insertNode(line_no,((PEN*MOD)+atoi(arg)));
     else if (compare_token(command, "print") == 0)
-        printf("Unrecognised command with line number: %s.\n", command);
+        printf("[ERROR]:program_update:Unrecognised command with line number: %s.\n", command);
     else if (compare_token(command, "right") == 0)
         return insertNode(line_no,((RIGHT*MOD)+atoi(arg)));
     else if (compare_token(command, "run") == 0)
-        printf("Unrecognised command with line number: %s.\n", command);
+        printf("[ERROR]:program_update:Unrecognised command with line number: %s.\n", command);
     else if (compare_token(command, "save") == 0)
-        printf("Unrecognised command with line number: %s.\n", command);
+        printf("[ERROR]:program_update:Unrecognised command with line number: %s.\n", command);
     else if (compare_token(command, "exit") == 0)
-        printf("Unrecognised command with line number: %s.\n", command);
+        printf("[ERROR]:program_update:Unrecognised command with line number: %s.\n", command);
     else
-        printf("Unrecognised command: %s.\n", command);
+        printf("[ERROR]:program_update:Unrecognised command: %s.\n", command);
     
     return 0;
     
