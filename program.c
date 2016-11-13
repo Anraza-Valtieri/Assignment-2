@@ -213,11 +213,43 @@ int program_execute() {
 	
 	/* to be implemented */
     int totalCommands = 0, successfulCommands = 0;
-    /* to be implemented */
-    for(int i=10; i<2000000; i += 10){
-        insertNode(i,(((rand()%4+1)*MOD)+ rand()%60));
+    if (program.first == NULL) {
+        printf("[ERROR]:program_execute: Nothing to execute.\n");
+    }else {
+        // Init lookup from first Line
+        canvas_init();
+        turtle_init();
+        Data *current_line;
+        current_line = program.first;
+        int value = 0;
+        while (1) {
+            value = current_line->element;
+            switch (value / MOD) {
+                case 1: // FORWARD
+                    printf("%d FORWARD %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    do_forward(value%MOD);
+                    break;
+                case 2: // BACKWARD
+                    printf("%d BACKWARD %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    do_backward(value%MOD);
+                    break;
+                case 3: // LEFT
+                    printf("%d LEFT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    do_left(value%MOD);
+                    break;
+                case 4: // RIGHT
+                    printf("%d RIGHT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    do_right(value%MOD);
+                    break;
+            }
+            if (current_line->next == NULL) {
+                break;
+            }
+            else {
+                current_line = current_line->next;
+            }
+        }
     }
-    //printf("program_execute completed with successfulCommands: %d and a total of %d commands.\n", successfulCommands, totalCommands);
     return totalCommands;
     
 	

@@ -37,11 +37,11 @@ int do_command(const char *command, const char *arg) {
 	
 	/* determine which command was given and execute the appropriate function */
 	if (compare_token(command, "backward") == 0)
-		do_backward(arg);
+		do_backward(atoi(arg));
 	else if (compare_token(command, "forward") == 0)
-		do_forward(arg);
+		do_forward(atoi(arg));
 	else if (compare_token(command, "left") == 0)
-		do_left(arg);
+		do_left(atoi(arg));
 	else if (compare_token(command, "list") == 0)
 		do_list(arg);
 	else if (compare_token(command, "load") == 0)
@@ -53,7 +53,7 @@ int do_command(const char *command, const char *arg) {
 	else if (compare_token(command, "print") == 0)
 		do_print(arg);
 	else if (compare_token(command, "right") == 0)
-		do_right(arg);
+		do_right(atoi(arg));
 	else if (compare_token(command, "run") == 0)
 		do_run(arg);
 	else if (compare_token(command, "save") == 0)
@@ -71,19 +71,19 @@ int do_command(const char *command, const char *arg) {
 /*
  * BACKWARD command.
  */
-void do_backward(const char *arg) {
-	int steps = atoi(arg);
-	turtle_move(-steps);
+void do_backward(int arg) {
+	//int steps = atoi(arg);
+	turtle_move(-arg);
 }
 
 
 /*
  * FORWARD command.
  */
-void do_forward(const char *arg) {
+void do_forward(int arg) {
 
-	int steps = atoi(arg);
-	turtle_move(steps);
+	//int steps = atoi(arg);
+	turtle_move(arg);
 	canvas_write(NULL); /*For faster testing*/
 }
 
@@ -91,14 +91,14 @@ void do_forward(const char *arg) {
 /*
  * LEFT command.
  */
-void do_left(const char *arg) {
-	int degree;
-	degree = atoi(arg);
-	if (degree != 45 && degree != 90 && degree != 135 && degree != 180) {
+void do_left(int arg) {
+	//int degree;
+	//degree = atoi(arg);
+	if (arg != 45 && arg != 90 && arg != 135 && arg != 180) {
 		printf("Please enter a degree of 45, 90, 135 or 180.\n");
 	}
 	else {
-		turtle_turn(-degree);
+		turtle_turn(-arg);
 	}
 }
 
@@ -183,14 +183,14 @@ void do_print(const char *arg) {
 /*
  * RIGHT command.
  */
-void do_right(const char *arg) {
-	int degree;
-	degree = atoi(arg);
-	if (degree != 45 && degree != 90 && degree != 135 && degree != 180) {
+void do_right(int arg) {
+	//int degree;
+	//degree = atoi(arg);
+	if (arg != 45 && arg != 90 && arg != 135 && arg != 180) {
 		printf("Please enter a degree of 45, 90, 135 or 180.\n");
 	}
 	else {
-		turtle_turn(degree);
+		turtle_turn(arg);
 	}
 }
 

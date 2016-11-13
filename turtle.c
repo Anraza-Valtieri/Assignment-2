@@ -32,6 +32,7 @@ int putc_if_pen_down(int x, int y, char c) {
 	if (turtle.pen == PEN_DOWN) {
 		return canvas_putc(x, y, c);
 	}
+    return NULL;
 }
 	
 /*

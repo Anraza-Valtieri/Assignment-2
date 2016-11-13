@@ -35,7 +35,7 @@
 #define LEFT 3
 #define RIGHT 4
 #define PEN 5
-#define MOD 80 // 52
+#define MOD 160 // 52
 
 
 //Array orderedIds;
@@ -54,15 +54,15 @@ void canvas_write(FILE *f);
 
 /* functions defined in commands.c */
 int do_command(const char *command, const char *arg);
-void do_backward(const char *arg);
-void do_forward(const char *arg);
-void do_left(const char *arg);
+void do_backward(int arg);
+void do_forward(int arg);
+void do_left(int arg);
 void do_list(const char *arg);
 void do_load(const char *arg);
 void do_output(const char *arg);
 void do_pen(const char *arg);
 void do_print(const char *arg);
-void do_right(const char *arg);
+void do_right(int arg);
 void do_run(const char *run);
 void do_save(const char *arg);
  
