@@ -74,7 +74,6 @@ int do_command(const char *command, const char *arg) {
 void do_backward(const char *arg) {
 	int steps = atoi(arg);
 	turtle_move(-steps);
-	canvas_write(NULL);
 }
 
 
@@ -85,7 +84,7 @@ void do_forward(const char *arg) {
 
 	int steps = atoi(arg);
 	turtle_move(steps);
-	canvas_write(NULL);
+	canvas_write(NULL); /*For faster testing*/
 }
 
 
@@ -134,8 +133,17 @@ void do_list(const char *arg) {
  * OUTPUT command.
  */
 void do_output(const char *arg) {
+	
 	printf("output command\n");
-	canvas_write(NULL);
+	if (arg[0] == '*') {
+		canvas_write(NULL);
+	}
+	else
+	{
+		FILE *f = fopen(arg, "w");
+		canvas_write(f);
+	}
+	
 	/* to be implemented */
 }
 
@@ -146,10 +154,12 @@ void do_output(const char *arg) {
 void do_pen(const char *arg) {
 	if (strcmp(arg, "UP") == 0) {
 		turtle_setpen(PEN_UP);
+		printf("The PEN set to UP.\n");
 	}
 
 	else if (strcmp(arg, "DOWN") == 0) {
 		turtle_setpen(PEN_DOWN);
+		printf("The PEN set to DOWN.\n");
 	}
 
 	else {
@@ -163,8 +173,8 @@ void do_pen(const char *arg) {
  */
 void do_print(const char *arg) {
 	
-	/* to be implemented */
-	
+	/* Send the arg mem location i.e. point element[0] of arg, to turtle */
+	turtle_print(arg);
 }
 
 

@@ -28,12 +28,12 @@ void turtle_init() {
 	turtle.pen = PEN_DOWN;
 }
 
-void putc_if_pen_down(int x, int y, char c) {
+int putc_if_pen_down(int x, int y, char c) {
 	if (turtle.pen == PEN_DOWN) {
-		canvas_putc(x, y, c);
+		return canvas_putc(x, y, c);
 	}
 }
-
+	
 /*
 * Move the turtle.
 *
@@ -55,67 +55,75 @@ int turtle_move(int steps) {
 	}
 
 	steps = abs(steps);
-
+	
 	switch (turtle.orientation) {
 	case NORTH:
 		for (i = 0; i < steps; i++) {
 			putc_if_pen_down(turtle.x, turtle.y, '#');
-			turtle.y -= 1 * is_negative;
+			if (turtle.y>0){turtle.y -= 1 * is_negative;}
 		}
 		break;
 	case SOUTH:
 		for (i = 0; i < steps; i++) {
 			putc_if_pen_down(turtle.x, turtle.y, '#');
-			turtle.y += 1 * is_negative;;
+			if (turtle.y < MAX_Y - 1) {turtle.y += 1 * is_negative;}
 		}
 		break;
 	case EAST:
 		for (i = 0; i < steps; i++) {
 			putc_if_pen_down(turtle.x, turtle.y, '#');
-			turtle.x += 1 * is_negative;
+			if (turtle.x<MAX_X-1) { turtle.x += 1 * is_negative; }
 		}
 		break;
 	case WEST:
 		for (i = 0; i < steps; i++) {
 			putc_if_pen_down(turtle.x, turtle.y, '#');
-			turtle.x -= 1 * is_negative;
+			if (turtle.x>0) { turtle.x -= 1 * is_negative; }
 		}
 		break;
 	case NORTHEAST:
 		for (i = 0; i < steps; i++) {
+			if (turtle.y>0 && turtle.x<MAX_X - 1) { 
+				turtle.y -= 1 * is_negative; 
+				turtle.x += 1 * is_negative;			
+			}
 			putc_if_pen_down(turtle.x, turtle.y, '#');
-			turtle.x += 1 * is_negative;
-			turtle.y -= 1 * is_negative;
 		}
 		break;
 	case NORTHWEST:
 		for (i = 0; i < steps; i++) {
 			putc_if_pen_down(turtle.x, turtle.y, '#');
-			turtle.x -= 1 * is_negative;
-			turtle.y -= 1 * is_negative;
+			if (turtle.y>0 && turtle.x>0) { 
+				turtle.y -= 1 * is_negative;
+				turtle.x -= 1 * is_negative;
+			}
 		}
 		break;
 	case SOUTHEAST:
 		for (i = 0; i < steps; i++) {
 			putc_if_pen_down(turtle.x, turtle.y, '#');
-			turtle.x += 1 * is_negative;
-			turtle.y += 1 * is_negative;
+			if (turtle.y < MAX_Y - 1 && turtle.x<MAX_X - 1) { 
+				turtle.y += 1 * is_negative;
+				turtle.x += 1 * is_negative;
+			}
 		}
 		break;
 	case SOUTHWEST:
 		for (i = 0; i < steps; i++) {
 			putc_if_pen_down(turtle.x, turtle.y, '#');
-			turtle.x -= 1 * is_negative;
-			turtle.y += 1 * is_negative;
+			if (turtle.y < MAX_Y - 1 && turtle.x>0) { 
+				turtle.y += 1 * is_negative; 
+				turtle.x -= 1 * is_negative;
+			}
 		}
 		break;
 	default:
 		printf("Something went horribly wrong.\n");
 		break;
-	};
-
+	}
+	printf("Turtle Coordinates  x:%d  y:%d\n", turtle.x, turtle.y);
 	return 0;
-
+	
 }
 
 
@@ -130,11 +138,10 @@ int turtle_move(int steps) {
 *   the number of characters printed
 */
 int turtle_print(const char *s) {
-
-	/* to be implemented */
-
+	if (turtle.pen == PEN_DOWN) {
+		canvas_puts(turtle.x, turtle.y, s);
+	}
 	return 0;
-
 }
 
 
