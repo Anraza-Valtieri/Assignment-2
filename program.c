@@ -235,11 +235,24 @@ int program_execute() {
  */
 int program_read(FILE *f) {
 	printf("program_read Called.\n");
-    int totalCommands = 0;
-	/* to be implemented */
+	int totalCommands = 0;
+	//CLEAR MEMORY FIRST
+	clearNodes();
+	char *buffer = (char *)malloc(sizeof(char) * MAX_INPUT - 1);	/* buffer for holding a line of input from file */
+	int line_no;										/* the line number input by the file */
+	char *command = (char *)malloc(sizeof(char) * MAX_INPUT - 1);	/* buffer for holding the current command */
+	char *arg = (char *)malloc(sizeof(char) * MAX_INPUT - 1);		/* buffer for holding the current argument */
+	while (fgets(buffer, MAX_INPUT - 1, f) != NULL) {	//Get commands stored in file line by line
+		parse_line(buffer, &line_no, command, arg);
+		program_update(line_no, command, arg);
+	}
+	fclose(f);
+	free(buffer);
+	free(command);
+	free(arg);
+
 	printf("program_read completed with a total of %d commands.\n", totalCommands);
 	return totalCommands;
-	
 }
 
 
@@ -305,10 +318,41 @@ int program_update(int line_no, const char *command, const char *arg) {
  *   f - the file
  */
 void program_write(FILE *f) {
-	
-	/* do be implemented */
-    printf("program_write Called\n");
-	
+	printf("program_write Called\n");
+
+	Data *current_line;
+	current_line = program.first;
+	if (current_line != NULL) {
+		int value;
+		while (1) {
+			value = current_line->element;
+			switch (value / MOD) {
+			case 1:
+				fprintf(f, "%d FORWARD %d\n", current_line->line_no, current_line->element%MOD);
+				break;
+			case 2:
+				fprintf(f, "%d BACKWARD %d\n", current_line->line_no, current_line->element%MOD);
+				break;
+			case 3:
+				fprintf(f, "%d LEFT %d\n", current_line->line_no, current_line->element%MOD);
+				break;
+			case 4:
+				fprintf(f, "%d RIGHT %d\n", current_line->line_no, current_line->element%MOD);
+				break;
+			}
+			if (current_line->next == NULL) {
+				break;
+			}
+			else {
+				current_line = current_line->next;
+			}
+		}
+	}
+	else {
+		printf("Nothing stored in program yet...\n");
+	}
+	printf("File saved successfully!\n");
+	fclose(f);
 }
 
 
