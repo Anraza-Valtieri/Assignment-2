@@ -41,12 +41,13 @@ int canvas_putc(int x, int y, char c) {
 	//Checks that coordinates are within the bounds of the canvas []
 	if (x > -1 && y > -1 && x < MAX_X && y < MAX_Y) {
 		grid[x][y] = c;
+		return 1;
 	}
-	else
-	{
+	else{
 		printf("Coordinates not on canvas\n");
+		return 0;
 	}
-    return 0;
+    
 }
 
 
@@ -62,8 +63,15 @@ int canvas_putc(int x, int y, char c) {
  *   the number of characters written
  */
 int canvas_puts(int x, int y, const char *s) {
+	for (size_t i = 0; i < strlen(s); i++){
+		if (x > -1 && y > -1 && x < MAX_X && y < MAX_Y) {
+			grid[x][y] = s[i];
+		}
+		x++;
+	}
 	
 	/* to be implemented */
+	canvas_write(NULL);
     return 0;
 }
 
@@ -75,26 +83,26 @@ int canvas_puts(int x, int y, const char *s) {
  *  f - the file
  */
 void canvas_write(FILE *f) {
-	/*
-	canvas_putc(3, 0, '#');
-	canvas_putc(3, 1, '#');
-	canvas_putc(3, 2, '#');
-	canvas_putc(1, 3, '#');
-	canvas_putc(2, 3, '#');
-	canvas_putc(3, 3, '#');
-	canvas_putc(4, 3, '#');
-	canvas_putc(5, 3, '#');
-	*/
-	//For current testing file is null so ignore it for now - Daniel
 	int x, y = 0;
-	for (y = 0; y < MAX_Y; y++) {
-		for (x = 0; x < MAX_X; x++) {
-			printf("%c", grid[x][y]);
-		}
-		printf("\n");
-	}
+	//Check if there is a file, otherwise treat as null i.e OUTPUT *
+	if (f) {
+		printf("Not Null\n");
 
-	printf("canvas write\n");
-	/* to be implemented: handling actual file */
-	
+		for (y = 0; y < MAX_Y; y++) {
+			for (x = 0; x < MAX_X; x++) {
+				fprintf(f,"%c", grid[x][y]);
+			}
+			fprintf(f, "\n");
+		}
+		fclose(f);
+	}
+	//Print canvas to screen
+	else {
+		for (y = 0; y < MAX_Y; y++) {
+			for (x = 0; x < MAX_X; x++) {
+				printf("%c", grid[x][y]);
+			}
+			printf("\n");
+		}
+	}
 }
