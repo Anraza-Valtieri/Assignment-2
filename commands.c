@@ -109,14 +109,16 @@ void do_left(const char *arg) {
  */
 void do_load(const char *arg) {
 	
-	/* to be implemented */
-    /* Errors, we always need an arg. */
-    if (arg && !arg[0]){
-        printf("[Error]: The load command requires an arg.\n");
-        return;
-    }
-    clearNodes();
-    
+	/* Errors, we always need an arg. */
+	if (arg && !arg[0]) {
+		printf("[Error]: The save command requires an argument.\n");
+		return;
+	}
+	FILE *f = fopen(strcat(arg, ".txt"), "r");
+	if (f == NULL) {
+		printf("File %s does not exists!\n", arg);
+	}
+	else { program_read(f); }
 }
 
 
@@ -198,12 +200,19 @@ void do_run(const char *arg) {
  */
 void do_save(const char *arg) {
 	
-	/* to be implemented */
-    /* Errors, we always need an arg. */
-    if (arg && !arg[0]){
-        printf("[Error]: The save command requires an argument.\n");
-        return;
-    }
-    program_write(*arg);
-	
+	/* Errors, we always need an arg. */
+	if (arg && !arg[0]) {
+		printf("[Error]: The save command requires an argument.\n");
+		return;
+	}
+	FILE *fTemp = fopen(strcat(arg, ".txt"), "r");
+	if (fTemp != NULL) {
+		fclose(fTemp);
+		printf("Filename already exists!");
+		return;
+	}
+	else {
+		FILE *f = fopen(strcat(arg, ".txt"), "w");
+		program_write(f);
+	}
 }
