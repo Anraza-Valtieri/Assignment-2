@@ -20,7 +20,7 @@ int main(int argc,char* argv[]) {
 
 	char line[MAX_INPUT];		/* buffer for holding a line of input from the user */
 	int line_no;				/* the line number input by the user */
-	int num_tokens;				/* the number of tokens in the input */
+	//int num_tokens;				/* the number of tokens in the input */
 	char command[MAX_INPUT];	/* buffer for holding the current command */
 	char arg[MAX_INPUT];		/* buffer for holding the current argument */
 	int done = 0;				/* set to 1 to end the main loop */
@@ -34,11 +34,11 @@ int main(int argc,char* argv[]) {
 	printf("Welcome to the ICT1002 Logo interpreter.\n");
 	printf("Type commands one line at a time, after the ? prompt.\n");
 	printf("Execute EXIT to finish.\n\n");
-    /*clock_t tic = clock();
-    program_execute();
+    clock_t tic = clock();
+    //program_read("1");
     clock_t toc = clock();
     printf("Elapsed: %f seconds\n", (double)(toc - tic) / CLOCKS_PER_SEC);
-    clock_t tic2 = clock();
+    /*clock_t tic2 = clock();
     program_execute();
     clock_t toc2 = clock();
     printf("Elapsed: %f seconds\n", (double)(toc2 - tic2) / CLOCKS_PER_SEC);*/
