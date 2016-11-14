@@ -208,11 +208,11 @@ void do_save(const char *arg) {
 	FILE *fTemp = fopen(strcat(arg, ".txt"), "r");
 	if (fTemp != NULL) {
 		fclose(fTemp);
-		printf("Filename already exists!");
-		return;
+		printf("Filename already exists!\n");
 	}
 	else {
-		FILE *f = fopen(strcat(arg, ".txt"), "w");
+		FILE *f = fopen(arg, "w");
 		program_write(f);
 	}
+	return;
 }
