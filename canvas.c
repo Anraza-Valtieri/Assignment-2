@@ -19,7 +19,7 @@ void canvas_init() {
 	int x, y = 0;
 	for (y = 0; y < MAX_Y; y++) {
 		for (x = 0; x < MAX_X; x++) {
-			canvas_putc(x, y, ' ');
+			canvas_putc(x, y, '.');
 		}
 	}
 	/* to be implemnented */
