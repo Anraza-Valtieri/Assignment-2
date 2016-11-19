@@ -169,6 +169,9 @@ void program_print_All() {
                 case 4:
                     printf("%d RIGHT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
                     break;
+                case 5: // PEN
+                    printf("%d PEN %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    break;
             }
             if (current_line->next == NULL) {
                 break;
@@ -240,6 +243,13 @@ int program_execute() {
                 case 4: // RIGHT
                     printf("%d RIGHT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
                     do_right(value%MOD);
+                    break;
+                case 5: // PEN
+                    printf("%d RIGHT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    if(value%MOD == 1)
+                        do_pen("UP");
+                    else
+                        do_pen("DOWN");
                     break;
             }
             if (current_line->next == NULL) {
@@ -323,8 +333,14 @@ int program_update(int line_no, const char *command, const char *arg) {
         printf("[ERROR]:program_update:Unrecognised command with line number: %s.\n", command);
     else if (compare_token(command, "output") == 0)
         do_output(arg);
-    else if (compare_token(command, "pen") == 0)
-        return insertNode(line_no,((PEN*MOD)+atoi(arg)));
+    else if (compare_token(command, "pen") == 0){
+        int flag = 0;
+        if(strcmp(arg, "UP") == 0)
+            flag = PEN_UP;
+        else
+            flag = PEN_DOWN;
+        return insertNode(line_no,((PEN*MOD)+flag));
+    }
     else if (compare_token(command, "print") == 0)
         printf("[ERROR]:program_update:Unrecognised command with line number: %s.\n", command);
     else if (compare_token(command, "right") == 0)
