@@ -74,6 +74,7 @@ int do_command(const char *command, const char *arg) {
 void do_backward(int arg) {
 	//int steps = atoi(arg);
 	turtle_move(-arg);
+    canvas_write(NULL); /*For faster testing*/
 }
 
 
@@ -113,7 +114,7 @@ void do_load(const char *arg) {
 		printf("[Error]: The save command requires an argument.\n");
 		return;
 	}
-	FILE *f = fopen(strcat(arg, ".txt"), "r");
+	FILE *f = fopen(arg, "r");
 	if (f == NULL) {
 		printf("File %s does not exists!\n", arg);
 	}
@@ -215,14 +216,14 @@ void do_save(const char *arg) {
 		printf("[Error]: The save command requires an argument.\n");
 		return;
 	}
-	FILE *fTemp = fopen(strcat(arg, ".txt"), "r");
+	FILE *fTemp = fopen(arg, "r");
 	if (fTemp != NULL) {
 		fclose(fTemp);
 		printf("Filename already exists!");
 		return;
 	}
 	else {
-		FILE *f = fopen(strcat(arg, ".txt"), "w");
+		FILE *f = fopen(arg, "w");
 		program_write(f);
 	}
 }

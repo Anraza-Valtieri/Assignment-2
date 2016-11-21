@@ -169,6 +169,9 @@ void program_print_All() {
                 case 4:
                     printf("%d RIGHT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
                     break;
+                case 5: // PEN
+                    printf("%d PEN %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    break;
             }
             if (current_line->next == NULL) {
                 break;
@@ -241,6 +244,13 @@ int program_execute() {
                     printf("%d RIGHT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
                     do_right(value%MOD);
                     break;
+                case 5: // PEN
+                    printf("%d RIGHT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    if(value%MOD == 1)
+                        do_pen("UP");
+                    else
+                        do_pen("DOWN");
+                    break;
             }
             if (current_line->next == NULL) {
                 break;
@@ -271,12 +281,12 @@ int program_read(FILE *f) {
 	//CLEAR MEMORY FIRST
 	clearNodes();
 	char *buffer = (char *)malloc(sizeof(char) * MAX_INPUT - 1);	/* buffer for holding a line of input from file */
-	int line_no;										/* the line number input by the file */
 	char *command = (char *)malloc(sizeof(char) * MAX_INPUT - 1);	/* buffer for holding the current command */
 	char *arg = (char *)malloc(sizeof(char) * MAX_INPUT - 1);		/* buffer for holding the current argument */
-	while (fgets(buffer, MAX_INPUT - 1, f) != NULL) {	//Get commands stored in file line by line
-		parse_line(buffer, &line_no, command, arg);
-		program_update(line_no, command, arg);
+	while (!feof(f)) {
+		if (fscanf(f, "%s%s%s", buffer, command, arg) == 3) {
+			program_update(atoi(buffer), command, arg);
+		}
 	}
 	fclose(f);
 	free(buffer);
@@ -323,8 +333,14 @@ int program_update(int line_no, const char *command, const char *arg) {
         printf("[ERROR]:program_update:Unrecognised command with line number: %s.\n", command);
     else if (compare_token(command, "output") == 0)
         do_output(arg);
-    else if (compare_token(command, "pen") == 0)
-        return insertNode(line_no,((PEN*MOD)+atoi(arg)));
+    else if (compare_token(command, "pen") == 0){
+        int flag = 0;
+        if(strcmp(arg, "UP") == 0)
+            flag = PEN_UP;
+        else
+            flag = PEN_DOWN;
+        return insertNode(line_no,((PEN*MOD)+flag));
+    }
     else if (compare_token(command, "print") == 0)
         printf("[ERROR]:program_update:Unrecognised command with line number: %s.\n", command);
     else if (compare_token(command, "right") == 0)
