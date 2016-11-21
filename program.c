@@ -239,12 +239,12 @@ int program_read(FILE *f) {
 	//CLEAR MEMORY FIRST
 	clearNodes();
 	char *buffer = (char *)malloc(sizeof(char) * MAX_INPUT - 1);	/* buffer for holding a line of input from file */
-	int line_no;										/* the line number input by the file */
 	char *command = (char *)malloc(sizeof(char) * MAX_INPUT - 1);	/* buffer for holding the current command */
 	char *arg = (char *)malloc(sizeof(char) * MAX_INPUT - 1);		/* buffer for holding the current argument */
-	while (fgets(buffer, MAX_INPUT - 1, f) != NULL) {	//Get commands stored in file line by line
-		parse_line(buffer, &line_no, command, arg);
-		program_update(line_no, command, arg);
+	while (!feof(f)) {
+		if (fscanf(f, "%s%s%s", buffer, command, arg) == 3) {
+			program_update(atoi(buffer), command, arg);
+		}
 	}
 	fclose(f);
 	free(buffer);
