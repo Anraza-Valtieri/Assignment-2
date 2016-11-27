@@ -367,7 +367,7 @@ int program_update(int line_no, const char *command, const char *arg) {
             printf("[ERROR]:program_update: Please enter a degree of 45, 90, 135 or 180.\n");
             return 0;
         }else{
-            return insertNode(line_no,((LEFT*MOD)+ atoi(arg)));
+            return insertNode(line_no,((RIGHT*MOD)+ atoi(arg)));
         }
     }
     else if (compare_token(command, "run") == 0)
