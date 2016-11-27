@@ -155,12 +155,12 @@ void do_output(const char *arg) {
  * PEN command.
  */
 void do_pen(const char *arg) {
-	if (strcmp(arg, "UP") == 0) {
+	if (strcmp(arg, "UP") == 0 || strcmp(arg, "Up") == 0 || strcmp(arg, "up") == 0) {
 		turtle_setpen(PEN_UP);
 		printf("The PEN set to UP.\n");
 	}
 
-	else if (strcmp(arg, "DOWN") == 0) {
+	else if (strcmp(arg, "DOWN") == 0 || strcmp(arg, "Down") == 0 || strcmp(arg, "down") == 0) {
 		turtle_setpen(PEN_DOWN);
 		printf("The PEN set to DOWN.\n");
 	}

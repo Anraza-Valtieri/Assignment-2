@@ -35,7 +35,8 @@
 #define LEFT 3
 #define RIGHT 4
 #define PEN 5
-#define MOD 160 // 52
+#define PRINT 6
+#define MOD 200 // 52
 
 
 //Array orderedIds;
