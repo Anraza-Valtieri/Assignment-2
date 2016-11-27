@@ -44,7 +44,7 @@ void clearNodes() {
         while (1) {
             Data *current_line;
             current_line = program.last;
-            printf("[DEBUG]:clearNodes: Line No: %d data: %d\n", current_line->line_no, current_line->element);
+            //printf("[DEBUG]:clearNodes: Line No: %d data: %d\n", current_line->line_no, current_line->element);
             /* We have reached the end of clearing Nodes. */
             if (current_line->prev == NULL) {
                 program.first = NULL;
@@ -83,7 +83,7 @@ int insertNode(int line_no, int element) {
         program.first = new;
         program.last = new;
         program.last_line = line_no;
-        printf("[DEBUG]:InsertNode: Insert Line_no %d Data %d.\n", line_no, element);
+        //printf("[DEBUG]:InsertNode: Insert Line_no %d Data %d.\n", line_no, element);
         
     }else{
         /*Line_no is larger than last registed last line.*/
@@ -98,7 +98,7 @@ int insertNode(int line_no, int element) {
             program.last->next = new;
             program.last = new;
             program.last_line = line_no;
-            printf("[DEBUG]:InsertNode: Insert Line_no %d Data %d.\n", line_no, element);
+            //printf("[DEBUG]:InsertNode: Insert Line_no %d Data %d.\n", line_no, element);
         }
         else {
             Data *current_line;
@@ -107,7 +107,7 @@ int insertNode(int line_no, int element) {
                 /* Line_no already exist so we have to replace*/
                 if (current_line->line_no == line_no) {
                     current_line->element = element;
-                    printf("[DEBUG]:InsertNode: Replace Line_no %d Data %d.\n", line_no, element);
+                    //printf("[DEBUG]:InsertNode: Replace Line_no %d Data %d.\n", line_no, element);
                     break;
                 }
                 
@@ -129,7 +129,7 @@ int insertNode(int line_no, int element) {
                         current_line->prev = new;
                         program.first = new;
                     }
-                    printf("[DEBUG]:InsertNode: Insert Between Line_no %d Data %d.\n", line_no, element);
+                    //printf("[DEBUG]:InsertNode: Insert Between Line_no %d Data %d.\n", line_no, element);
                     break;
                 }
                 
@@ -170,8 +170,13 @@ void program_print_All() {
                     printf("%d RIGHT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
                     break;
                 case 5: // PEN
-                    printf("%d PEN %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    if(value%MOD == PEN_UP){
+                    printf("%d PEN UP %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
                     break;
+                    }else{
+                        printf("%d PEN DOWN %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                        break;
+                    }
             }
             if (current_line->next == NULL) {
                 break;
@@ -227,40 +232,49 @@ int program_execute() {
         int value = 0;
         while (1) {
             value = current_line->element;
+            totalCommands++;
             switch (value / MOD) {
                 case 1: // FORWARD
                     printf("%d FORWARD %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
                     do_forward(value%MOD);
+                    successfulCommands++;
                     break;
                 case 2: // BACKWARD
                     printf("%d BACKWARD %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
                     do_backward(value%MOD);
+                    successfulCommands++;
                     break;
                 case 3: // LEFT
                     printf("%d LEFT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
                     do_left(value%MOD);
+                    successfulCommands++;
                     break;
                 case 4: // RIGHT
                     printf("%d RIGHT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
                     do_right(value%MOD);
+                    successfulCommands++;
                     break;
                 case 5: // PEN
                     printf("%d RIGHT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
-                    if(value%MOD == 1)
+                    if(value%MOD == PEN_UP)
                         do_pen("UP");
                     else
                         do_pen("DOWN");
+                    
+                    successfulCommands++;
                     break;
             }
             if (current_line->next == NULL) {
                 break;
             }
             else {
+                
                 current_line = current_line->next;
             }
         }
     }
-    return totalCommands;
+    printf("program_execute completed with a total of %d commands and %d successful.\n", totalCommands,successfulCommands);
+    return successfulCommands;
     
 	
 }
@@ -286,6 +300,7 @@ int program_read(FILE *f) {
 	while (!feof(f)) {
 		if (fscanf(f, "%s%s%s", buffer, command, arg) == 3) {
 			program_update(atoi(buffer), command, arg);
+            totalCommands++;
 		}
 	}
 	fclose(f);
@@ -315,7 +330,7 @@ int program_read(FILE *f) {
  *   0, if memory could not be allocated
  */
 int program_update(int line_no, const char *command, const char *arg) {
-    printf("[DEBUG]:program_update: Adding new entry at %d\n", line_no);
+    //printf("[DEBUG]:program_update: Adding new entry at %d\n", line_no);
     if(atoi(arg) < 0){
         printf("[ERROR]:program_update: Failed adding new entry at %d. Arg < 0\n", line_no);
         return 0;
@@ -325,8 +340,14 @@ int program_update(int line_no, const char *command, const char *arg) {
         return insertNode(line_no,((BACKWARDS*MOD)+ atoi(arg)));
     else if (compare_token(command, "forward") == 0)
         return insertNode(line_no, ((FORWARD*MOD)+ atoi(arg)));
-    else if (compare_token(command, "left") == 0)
-        return insertNode(line_no,((LEFT*MOD)+ atoi(arg)));
+    else if (compare_token(command, "left") == 0){
+        if (atoi(arg) != 45 && atoi(arg) != 90 && atoi(arg) != 135 && atoi(arg) != 180) {
+            printf("[ERROR]:program_update: Please enter a degree of 45, 90, 135 or 180.\n");
+            return 0;
+        }else{
+            return insertNode(line_no,((LEFT*MOD)+ atoi(arg)));
+        }
+    }
     else if (compare_token(command, "list") == 0)
         do_list(arg);
     else if (compare_token(command, "load") == 0)
@@ -334,17 +355,21 @@ int program_update(int line_no, const char *command, const char *arg) {
     else if (compare_token(command, "output") == 0)
         do_output(arg);
     else if (compare_token(command, "pen") == 0){
-        int flag = 0;
-        if(strcmp(arg, "UP") == 0)
-            flag = PEN_UP;
-        else
-            flag = PEN_DOWN;
-        return insertNode(line_no,((PEN*MOD)+flag));
+        if(strcmp(arg, "UP") == 0 || strcmp(arg, "Up") == 0 || strcmp(arg, "up") == 0)
+            return insertNode(line_no,((PEN*MOD)+PEN_UP));
+        else if(strcmp(arg, "DOWN") == 0 || strcmp(arg, "Down") == 0 || strcmp(arg, "down") == 0)
+            return insertNode(line_no,((PEN*MOD)+PEN_DOWN));
     }
     else if (compare_token(command, "print") == 0)
         printf("[ERROR]:program_update:Unrecognised command with line number: %s.\n", command);
-    else if (compare_token(command, "right") == 0)
-        return insertNode(line_no,((RIGHT*MOD)+atoi(arg)));
+    else if (compare_token(command, "right") == 0){
+        if (atoi(arg) != 45 && atoi(arg) != 90 && atoi(arg) != 135 && atoi(arg) != 180) {
+            printf("[ERROR]:program_update: Please enter a degree of 45, 90, 135 or 180.\n");
+            return 0;
+        }else{
+            return insertNode(line_no,((LEFT*MOD)+ atoi(arg)));
+        }
+    }
     else if (compare_token(command, "run") == 0)
         printf("[ERROR]:program_update:Unrecognised command with line number: %s.\n", command);
     else if (compare_token(command, "save") == 0)
@@ -387,6 +412,14 @@ void program_write(FILE *f) {
 			case 4:
 				fprintf(f, "%d RIGHT %d\n", current_line->line_no, current_line->element%MOD);
 				break;
+            case 5:
+                if(value%MOD == PEN_UP){
+                    fprintf(f,"%d PEN UP\n", current_line->line_no);
+                    break;
+                }else{
+                    fprintf(f,"%d PEN DOWN\n", current_line->line_no);
+                    break;
+                }
 			}
 			if (current_line->next == NULL) {
 				break;
