@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "blogo.h"
 //
 /* declare all of the types and global variables associated with your program here */
@@ -40,6 +41,7 @@ void clearNodes() {
         printf("clearNodes: Nothing to list.\n");
     }
     else {
+        clock_t tic = clock();
         // Init lookup from last Line
         while (1) {
             Data *current_line;
@@ -61,6 +63,8 @@ void clearNodes() {
             }
             
         }
+        clock_t toc = clock();
+        printf("Elapsed: %f seconds\n", (double)(toc - tic) / CLOCKS_PER_SEC);
     }
 }
 
@@ -70,7 +74,6 @@ int insertNode(int line_no, int element) {
         printf("[ERROR]:insertNode: Failed to insert data, element > MOD.\n");
         return 0;
     }
-    
     
     /*The program does not have entry so initialize the first one.*/
     if (program.first == NULL) {
@@ -150,6 +153,8 @@ void program_print_All() {
     if (program.first == NULL) {
         printf("program_print_All: Nothing to list.\n");
     }else {
+        clock_t tic = clock();
+        
         // Init lookup from first Line
         Data *current_line;
         current_line = program.first;
@@ -185,6 +190,8 @@ void program_print_All() {
                 current_line = current_line->next;
             }
         }
+        clock_t toc = clock();
+        printf("Elapsed: %f seconds\n", (double)(toc - tic) / CLOCKS_PER_SEC);
     }
 }
 
@@ -332,10 +339,10 @@ int program_read(FILE *f) {
 int program_update(int line_no, const char *command, const char *arg) {
     //printf("[DEBUG]:program_update: Adding new entry at %d\n", line_no);
     if(atoi(arg) < 0){
-        printf("[ERROR]:program_update: Failed adding new entry at %d. Arg < 0\n", line_no);
+        printf("[ERROR]:program_update: Failed adding new entry at %d. Arg =< 0\n", line_no);
         return 0;
     }
-        
+    
     if (compare_token(command, "backward") == 0)
         return insertNode(line_no,((BACKWARDS*MOD)+ atoi(arg)));
     else if (compare_token(command, "forward") == 0)

@@ -34,10 +34,7 @@ int main(int argc,char* argv[]) {
 	printf("Welcome to the ICT1002 Logo interpreter.\n");
 	printf("Type commands one line at a time, after the ? prompt.\n");
 	printf("Execute EXIT to finish.\n\n");
-    clock_t tic = clock();
-    //program_read("1");
-    clock_t toc = clock();
-    printf("Elapsed: %f seconds\n", (double)(toc - tic) / CLOCKS_PER_SEC);
+    
     /*clock_t tic2 = clock();
     program_execute();
     clock_t toc2 = clock();
