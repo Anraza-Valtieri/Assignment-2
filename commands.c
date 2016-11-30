@@ -73,6 +73,10 @@ int do_command(const char *command, const char *arg) {
  */
 void do_backward(int arg) {
 	//int steps = atoi(arg);
+    if (arg < 0){
+        printf("Please enter a value > 0.\n");
+        return;
+    }
 	turtle_move(-arg);
     canvas_write(NULL); /*For faster testing*/
 }
@@ -84,6 +88,11 @@ void do_backward(int arg) {
 void do_forward(int arg) {
 
 	//int steps = atoi(arg);
+    if (arg < 0){
+        printf("Please enter a value > 0.\n");
+        return;
+    }
+        
 	turtle_move(arg);
 	canvas_write(NULL); /*For faster testing*/
 }
