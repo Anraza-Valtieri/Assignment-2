@@ -25,6 +25,7 @@ Program program;
 typedef struct data {
     int line_no;
     int element;
+    char *stringarg;
     struct data *next;
     struct data *prev;
 } Data;
@@ -69,7 +70,7 @@ void clearNodes() {
 }
 
 
-int insertNode(int line_no, int element) {
+int insertNode(int line_no, int element, const char *arg) {
     if (element%MOD > MOD){
         printf("[ERROR]:insertNode: Failed to insert data, element > MOD.\n");
         return 0;
@@ -80,7 +81,7 @@ int insertNode(int line_no, int element) {
         Data *new = malloc(sizeof(Data));
         new->line_no = line_no;
         new->element = element;
-
+        new->stringarg = strdup(arg);
         new->next = NULL;
         new->prev = NULL;
         program.first = new;
@@ -94,7 +95,7 @@ int insertNode(int line_no, int element) {
             Data *new = malloc(sizeof(Data));
             new->line_no = line_no;
             new->element = element;
-
+            new->stringarg = strdup(arg);
             new->prev = program.last;
             new->next = NULL;
             
@@ -110,6 +111,7 @@ int insertNode(int line_no, int element) {
                 /* Line_no already exist so we have to replace*/
                 if (current_line->line_no == line_no) {
                     current_line->element = element;
+                    current_line->stringarg = strdup(arg);
                     //printf("[DEBUG]:InsertNode: Replace Line_no %d Data %d.\n", line_no, element);
                     break;
                 }
@@ -119,7 +121,7 @@ int insertNode(int line_no, int element) {
                     Data *new = malloc(sizeof(Data));
                     new->line_no = line_no;
                     new->element = element;
-
+                    new->stringarg = strdup(arg);
                     new->prev = current_line->prev;
                     new->next = current_line;
                     /* Tricky here, we somehow do not have a proper start in nodes so we have to create them
@@ -182,6 +184,10 @@ void program_print_All() {
                         printf("%d PEN DOWN %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
                         break;
                     }
+                case 6: // PRINT
+                    printf("%d PRINT %s\n", current_line->line_no, current_line->stringarg);
+                    //do_print(current_line->stringarg);
+                    break;
             }
             if (current_line->next == NULL) {
                 break;
@@ -242,32 +248,36 @@ int program_execute() {
             totalCommands++;
             switch (value / MOD) {
                 case 1: // FORWARD
-                    printf("%d FORWARD %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    printf("%d FORWARD %d\n", current_line->line_no, current_line->element%MOD);
                     do_forward(value%MOD);
                     successfulCommands++;
                     break;
                 case 2: // BACKWARD
-                    printf("%d BACKWARD %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    printf("%d BACKWARD %d\n", current_line->line_no, current_line->element%MOD);
                     do_backward(value%MOD);
                     successfulCommands++;
                     break;
                 case 3: // LEFT
-                    printf("%d LEFT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    printf("%d LEFT %d\n", current_line->line_no, current_line->element%MOD);
                     do_left(value%MOD);
                     successfulCommands++;
                     break;
                 case 4: // RIGHT
-                    printf("%d RIGHT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    printf("%d RIGHT %d\n", current_line->line_no, current_line->element%MOD);
                     do_right(value%MOD);
                     successfulCommands++;
                     break;
                 case 5: // PEN
-                    printf("%d RIGHT %d data: %d\n", current_line->line_no, current_line->element%MOD, current_line->element);
+                    printf("%d RIGHT %d\n", current_line->line_no, current_line->element%MOD);
                     if(value%MOD == PEN_UP)
                         do_pen("UP");
                     else
                         do_pen("DOWN");
-                    
+                    successfulCommands++;
+                    break;
+                case 6: // PRINT
+                    printf("%d PRINT %s\n", current_line->line_no, current_line->stringarg);
+                    do_print(current_line->stringarg);
                     successfulCommands++;
                     break;
             }
@@ -344,15 +354,15 @@ int program_update(int line_no, const char *command, const char *arg) {
     }
     
     if (compare_token(command, "backward") == 0)
-        return insertNode(line_no,((BACKWARDS*MOD)+ atoi(arg)));
+        return insertNode(line_no,((BACKWARDS*MOD)+ atoi(arg)), arg);
     else if (compare_token(command, "forward") == 0)
-        return insertNode(line_no, ((FORWARD*MOD)+ atoi(arg)));
+        return insertNode(line_no, ((FORWARD*MOD)+ atoi(arg)), arg);
     else if (compare_token(command, "left") == 0){
         if (atoi(arg) != 45 && atoi(arg) != 90 && atoi(arg) != 135 && atoi(arg) != 180) {
             printf("[ERROR]:program_update: Please enter a degree of 45, 90, 135 or 180.\n");
             return 0;
         }else{
-            return insertNode(line_no,((LEFT*MOD)+ atoi(arg)));
+            return insertNode(line_no,((LEFT*MOD)+ atoi(arg)), arg);
         }
     }
     else if (compare_token(command, "list") == 0)
@@ -363,18 +373,19 @@ int program_update(int line_no, const char *command, const char *arg) {
         do_output(arg);
     else if (compare_token(command, "pen") == 0){
         if(strcmp(arg, "UP") == 0 || strcmp(arg, "Up") == 0 || strcmp(arg, "up") == 0)
-            return insertNode(line_no,((PEN*MOD)+PEN_UP));
+            return insertNode(line_no,((PEN*MOD)+PEN_UP), arg);
         else if(strcmp(arg, "DOWN") == 0 || strcmp(arg, "Down") == 0 || strcmp(arg, "down") == 0)
-            return insertNode(line_no,((PEN*MOD)+PEN_DOWN));
+            return insertNode(line_no,((PEN*MOD)+PEN_DOWN), arg);
     }
     else if (compare_token(command, "print") == 0)
-        printf("[ERROR]:program_update:Unrecognised command with line number: %s.\n", command);
+        return insertNode(line_no,(PRINT*MOD), arg);
+        //printf("[ERROR]:program_update:Unrecognised command with line number: %s.\n", command);
     else if (compare_token(command, "right") == 0){
         if (atoi(arg) != 45 && atoi(arg) != 90 && atoi(arg) != 135 && atoi(arg) != 180) {
             printf("[ERROR]:program_update: Please enter a degree of 45, 90, 135 or 180.\n");
             return 0;
         }else{
-            return insertNode(line_no,((RIGHT*MOD)+ atoi(arg)));
+            return insertNode(line_no,((RIGHT*MOD)+ atoi(arg)), arg);
         }
     }
     else if (compare_token(command, "run") == 0)
@@ -427,6 +438,9 @@ void program_write(FILE *f) {
                     fprintf(f,"%d PEN DOWN\n", current_line->line_no);
                     break;
                 }
+            case 6:
+                    fprintf(f, "%d PRINT %s\n", current_line->line_no, current_line->stringarg);
+                    break;
 			}
 			if (current_line->next == NULL) {
 				break;

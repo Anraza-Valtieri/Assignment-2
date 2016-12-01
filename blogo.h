@@ -40,6 +40,7 @@
 
 
 //Array orderedIds;
+int insertNode(int line_no, int element, const char *arg);
 
 /* functions defined in main.c */
 int compare_token(const char *token1, const char *token2);
